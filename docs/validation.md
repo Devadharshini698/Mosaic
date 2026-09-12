@@ -24,6 +24,6 @@ Methodology navigation and provenance values were verified. Mobile viewport test
 
 ## Demo and public HTTP
 
-The video is 107.836 seconds, 1920×1080, 24 fps, H.264/AAC, with 29 burned-in caption cues and a separate SRT. Mean audio level is −20.6 dB and peak is −2.7 dB. Representative encoded frames were inspected; final captions fit the lower caption band. See `artifacts/demo/validation.json`.
+The video is 112.344 seconds, 1920×1080, 24 fps, H.264/AAC, with 18 burned-in caption cues and a separate SRT. Mean audio level is −21.2 dB and peak is −2.9 dB. Representative encoded frames were inspected; final captions fit the lower caption band. See `artifacts/demo/validation.json`.
 
 After deployment, seven unauthenticated endpoint checks returned HTTP 200, with no cookies or bypass tokens. The report JSON, full record JSON, both CSVs, video, and subtitles matched local bytes exactly. Production browser QA confirmed combined search/filter, source row 6 evidence, methodology rounding disclosure, and the correct baseline. No browser console errors were observed. Full receipts are in `artifacts/http-validation.json`.

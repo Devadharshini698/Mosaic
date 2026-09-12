@@ -1,140 +1,86 @@
 1
-00:00:00,000 --> 00:00:03,843
-Mosaic Mix Lab turns the official
-Marketing Mix Optimizer dataset into a transparent
+00:00:00,100 --> 00:00:06,862
+You have fifty lakh rupees for marketing next
+month. Where should it go? Mosaic Mix Lab
 
 2
-00:00:03,843 --> 00:00:07,981
-budget decision. The question is simple: how
-should fifty lakh rupees per month be
+00:00:06,862 --> 00:00:08,845
+helps you explore that decision.
 
 3
-00:00:07,981 --> 00:00:12,120
-allocated across ten marketing channels? Email is
-capped at fifteen lakh, and SMS at
+00:00:10,324 --> 00:00:16,424
+We process all ten thousand, nine
+hundred and fifty official records. Every record
 
 4
-00:00:12,120 --> 00:00:12,711
-twelve lakh.
+00:00:16,424 --> 00:00:22,981
+passes validation. Email, SMS, and
+Affiliate have the highest average returns.
 
 5
-00:00:13,311 --> 00:00:17,778
-The engine processes all ten thousand,
-nine hundred and fifty observations, with one
+00:00:24,484 --> 00:00:30,396
+The brief suggests allocating in proportion
+to average returns. This gives expected
 
 6
-00:00:17,778 --> 00:00:22,245
-thousand and ninety five rows per
-channel. It checks dates, weekdays, missing values,
+00:00:30,396 --> 00:00:36,404
+revenue of about two point six six
+crore rupees. The exact amount is on screen.
 
 7
-00:00:22,245 --> 00:00:25,682
-monetary precision, duplicates, and complete
-coverage. All official records pass.
+00:00:37,876 --> 00:00:44,008
+But the mathematical maximum is different: fifteen
+lakh to Email, twelve lakh to SMS,
 
 8
-00:00:26,282 --> 00:00:30,511
-The brief suggests allocating proportionally to
-average daily return on ad spend. With
+00:00:44,201 --> 00:00:50,138
+and twenty-three lakh to Affiliate.
+With constant returns, expected revenue reaches
 
 9
-00:00:30,511 --> 00:00:34,741
-allocations rounded to whole paise, expected
-monthly revenue is two crore, sixty five
+00:00:50,138 --> 00:00:52,296
+about three point three nine crore.
 
 10
-00:00:34,741 --> 00:00:39,296
-lakh, sixty eight thousand, eight hundred and
-two rupees, and forty two paise. Email
+00:00:53,812 --> 00:01:01,762
+Real returns can change. For Meta Ads,
+returns fall sharply as spend increases. These
 
 11
-00:00:39,296 --> 00:00:40,598
-makes the largest contribution.
+00:01:01,762 --> 00:01:05,682
+charts show why historical
+averages need careful interpretation.
 
 12
-00:00:41,198 --> 00:00:44,754
-But proportional is not mathematically
-optimal. Under the stated constant return
+00:01:07,156 --> 00:01:15,368
+Every result has evidence. Search by date, filter
+by channel, or sort by spend. Here, we
 
 13
-00:00:44,754 --> 00:00:49,280
-formula, the maximum allocates fifteen lakh to
-Email, twelve lakh to SMS, and twenty
+00:01:15,368 --> 00:01:18,801
+find Email on
+January first, twenty twenty-three.
 
 14
-00:00:49,280 --> 00:00:53,806
-three lakh to Affiliate. Expected revenue is
-three crore, thirty eight lakh, fifty three
+00:01:20,284 --> 00:01:26,859
+Open the row to compare spend, revenue,
+and the calculated amount. This difference comes
 
 15
-00:00:53,806 --> 00:00:57,363
-thousand, five hundred and sixty
-one rupees, and sixty four paise.
+00:01:26,859 --> 00:01:33,454
+from rounding, not an overcharge. The
+explanation and original values are downloadable.
 
 16
-00:00:57,963 --> 00:01:01,855
-The performance charts expose limits of
-constant returns. Meta Ads averages three point
+00:01:34,948 --> 00:01:40,910
+The methodology explains both strategies
+and their rounding adjustments. Two independent
 
 17
-00:01:01,855 --> 00:01:06,944
-two four times return in the lowest spend
-quartile, falling to one point two four in the
+00:01:40,910 --> 00:01:47,148
+implementations reproduce the answers. You get a
+plan you can explore, with evidence you
 
 18
-00:01:06,944 --> 00:01:09,639
-highest. These are descriptive
-associations, not proof of causality.
-
-19
-00:01:10,239 --> 00:01:14,592
-The evidence explorer supports combined date
-search and channel filters, sorting, and
-
-20
-00:01:14,592 --> 00:01:18,945
-pagination. Here, searching Email on January
-first, twenty twenty three, isolates source
-
-21
-00:01:18,945 --> 00:01:19,671
-row six.
-
-22
-00:01:20,271 --> 00:01:23,722
-Opening that row reveals the
-recorded spend, revenue, and their reconciliation.
-
-23
-00:01:23,722 --> 00:01:28,115
-Multiplying spend by the rounded reported return
-creates a difference of two hundred and
-
-24
-00:01:28,115 --> 00:01:31,567
-fifteen rupees and seventy paise.
-This is rounding, not an overcharge.
-
-25
-00:01:32,167 --> 00:01:35,516
-Python rational arithmetic and an
-independent JavaScript decimal implementation agree.
-
-26
-00:01:35,516 --> 00:01:39,199
-The methodology separates both allocation
-conventions and explains the one paise
-
-27
-00:01:39,199 --> 00:01:42,883
-adjustment in the linear breakdown.
-Downloadable reports preserve the evidence. No
-
-28
-00:01:42,883 --> 00:01:46,901
-private answer key agreement is claimed,
-and no fellowship application has been
-
-29
-00:01:46,901 --> 00:01:47,236
-submitted.
+00:01:47,148 --> 00:01:50,906
+can check. No application has been submitted.

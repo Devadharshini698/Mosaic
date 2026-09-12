@@ -1,19 +1,20 @@
 {
-  "durationSeconds": 107.836,
+  "durationSeconds": 112.344,
   "resolution": "1920x1080",
   "fps": 24,
   "videoCodec": "H.264",
   "audioCodec": "AAC 128kbps",
   "pixelFormat": "yuv420p",
   "fastStart": true,
-  "captionCues": 29,
-  "captions": "burned in and separate SRT",
-  "voice": "Microsoft Zira Desktop, synthetic",
+  "captionCues": 18,
+  "captions": "burned in and separate SRT, synchronized to provider word boundaries",
+  "voice": "en-IN-NeerjaExpressiveNeural, synthetic neural",
+  "speakingRate": "+0%",
   "scenes": 8,
   "source": "Authentic app screenshots captured through browser tool",
-  "fileBytes": 2943086,
+  "fileBytes": 3316340,
   "audioLevels": [
-    "mean_volume: -20.6 dB",
-    "max_volume: -2.7 dB"
+    "mean_volume: -21.2 dB",
+    "max_volume: -2.9 dB"
   ]
 }

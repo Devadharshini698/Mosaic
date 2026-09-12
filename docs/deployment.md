@@ -2,7 +2,7 @@
 
 Target GitHub repository: https://github.com/Devadharshini698/Mosaic (provided by the user).
 
-App origin: https://mosaic-mix-lab-ajay.ochre-deer-1487.chatgpt.site
+App origin: https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site
 
 Hosting platform: **OpenAI Sites**. Do not describe this as Vercel, Netlify, or Cloudflare Pages. It uses the managed Sites publishing service. The required audience is public with no login.
 

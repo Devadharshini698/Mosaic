@@ -4,7 +4,7 @@ A public marketing budget optimizer for the Mosaic Fellowship **Marketing Mix Op
 
 **Requested GitHub repository:** https://github.com/Devadharshini698/Mosaic
 
-**App origin:** https://mosaic-mix-lab-ajay.ochre-deer-1487.chatgpt.site
+**App origin:** https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site
 
 The app is live on OpenAI Sites with public, no-login access. Seven unauthenticated HTTP checks passed, including the app, all report endpoints, demo video, and subtitles. Consult `artifacts/http-validation.json` for the evidence. Publication to the requested GitHub repository is still blocked by unavailable authenticated write access.
 
@@ -59,11 +59,11 @@ Daily reported ROAS is rounded to two decimals. Thus `spend × ROAS` need not eq
 - `docs/results.md`: exact answers and per-channel breakdown
 - `docs/tech-stack.md`, `docs/deployment.md`, `docs/validation.md`
 - `artifacts/independent-reconciliation.json`
-- `artifacts/demo/mosaic-mix-lab-demo.mp4`: narrated 107.84-second demo
+- `artifacts/demo/mosaic-mix-lab-demo.mp4`: narrated demo with an expressive neural voice
 - `artifacts/demo/demo.srt`, `transcript.md`, `demo-script.md`, `validation.json`
 - `public/demo/`: published video, subtitles, and transcript
 
-To regenerate the video on Windows: install `imageio-ffmpeg==0.6.0`, capture the specified authentic app screenshots, run `powershell -NoProfile -File engine/narrate.ps1`, then `python engine/make_demo.py`. It uses the installed Microsoft Zira Desktop synthetic voice, H.264/AAC, readable burned-in captions, and a separate SRT. Screenshot capture is a browser QA operation; no synthetic replacement screens are generated.
+To regenerate the video: run `python -m pip install -r requirements-demo.txt`, capture the specified authentic app screenshots, run `python engine/narrate_neural.py`, then `python engine/make_demo.py`. The narration uses Microsoft's `en-IN-NeerjaExpressiveNeural` synthetic Indian English voice at its natural speaking rate. Only the public demo script is sent to the speech service; no credentials are required. Provider word timings synchronize the burned-in captions and separate SRT. The video uses H.264/AAC. Screenshot capture is a browser QA operation; no synthetic replacement screens are generated.
 
 ## Deployment and assumptions
 

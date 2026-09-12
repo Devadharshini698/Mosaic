@@ -5,7 +5,7 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 
 root=Path(__file__).resolve().parents[1]
-origin=sys.argv[1] if len(sys.argv)>1 else 'https://mosaic-mix-lab-ajay.ochre-deer-1487.chatgpt.site'
+origin=sys.argv[1] if len(sys.argv)>1 else 'https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site'
 checks=[]
 for endpoint,local in [('/',root/'dist/index.html'),('/results/report.json',root/'public/results/report.json'),('/results/records.json',root/'public/results/records.json'),('/results/allocation.csv',root/'public/results/allocation.csv'),('/results/records.csv',root/'public/results/records.csv'),('/demo/mosaic-mix-lab-demo.mp4',root/'public/demo/mosaic-mix-lab-demo.mp4'),('/demo/demo.srt',root/'public/demo/demo.srt')]:
     with urlopen(Request(origin+endpoint,headers={'User-Agent':'MosaicMixLab-PublicVerification/1.0'}),timeout=60) as response:
