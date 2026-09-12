@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-12T05:13:43.646071+00:00",
+  "checkedAt": "2026-09-12T15:10:59.208752+00:00",
   "origin": "https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site",
   "authenticated": false,
   "cookiesSent": false,
@@ -45,14 +45,14 @@
       "endpoint": "/demo/mosaic-mix-lab-demo.mp4",
       "status": 200,
       "contentType": "video/mp4",
-      "bytes": 2943086,
+      "bytes": 3316340,
       "exactBytesMatch": true
     },
     {
       "endpoint": "/demo/demo.srt",
       "status": 200,
       "contentType": "text/plain",
-      "bytes": 3259,
+      "bytes": 2032,
       "exactBytesMatch": true
     }
   ]
