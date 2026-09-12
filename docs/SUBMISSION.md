@@ -1,6 +1,6 @@
 # Submission handoff — Marketing Mix Optimizer
 
-**A. Completion status:** Analysis, public app, tests, demo, and submission documents complete. Requested GitHub publication remains blocked by authenticated write access.
+**A. Completion status:** Analysis, public app, tests, demo, and submission documents complete. GitHub repository published.
 
 **B. Exact answer:** Mathematical maximum under the specified formula: **₹33,853,561.64**. The brief's suggested proportional baseline is **₹26,568,802.42** using executable whole-paise allocations. The alternate fractional-paise baseline is **₹26,568,802.44**. The private answer-key convention is unknown; none of these values is claimed to match it.
 
@@ -8,7 +8,7 @@
 
 **D. App URL:** https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site
 
-**E. GitHub URL:** https://github.com/Devadharshini698/Mosaic — requested destination, **not yet populated**. Local repository `D:\Mosaic-deva` is committed on `main` and `origin` points to this exact URL. Push failed because GitHub authentication was unavailable, and the browser account had no write controls. No alternate repository was created.
+**E. GitHub URL:** https://github.com/Devadharshini698/Mosaic — official project repository on branch `main`.
 
 **F. Demo:** [Watch video](https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site/demo/mosaic-mix-lab-demo.mp4). Local path: `D:\Mosaic-deva\artifacts\demo\mosaic-mix-lab-demo.mp4`. Duration 112.344 seconds. Subtitles: `artifacts/demo/demo.srt`; transcript: `artifacts/demo/transcript.md`; script: `artifacts/demo/demo-script.md`. Expressive Indian English neural narration (en-IN-NeerjaExpressiveNeural), at a natural speaking rate, is disclosed.
 
@@ -22,8 +22,8 @@
 
 **K. Hosting:** **OpenAI Sites**, public with no login. It is not Vercel, Netlify, or Cloudflare Pages. No prohibited tool or host was used.
 
-**L. Limitations:** GitHub write access remains unresolved. The brief is ambiguous between proportional allocation and a mathematical maximum. Historical constant ROAS is not a causal forecast and does not model saturation or cross-channel attribution overlap. Dataset actually ends on 2025-12-30. No private answer-key validation is claimed. Captions use speech-provider word timings.
+**L. Limitations:** The brief is ambiguous between proportional allocation and a mathematical maximum. Historical constant ROAS is not a causal forecast and does not model saturation or cross-channel attribution overlap. Dataset actually ends on 2025-12-30. No private answer-key validation is claimed. Captions use speech-provider word timings.
 
 **M. Fellowship application submitted:** **No.** No personal application fields or CV were uploaded.
 
-To finish repository publication, use an authenticated Git account with write permission to Devadharshini698/Mosaic, recheck remote state, and push the prepared `main` branch without force. Source bundle and ZIP are available under `artifacts/`.
+Source bundle and ZIP are available under `artifacts/`.

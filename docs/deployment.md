@@ -8,7 +8,7 @@ Hosting platform: **OpenAI Sites**. Do not describe this as Vercel, Netlify, or 
 
 Status: **live and publicly accessible without login**. The Sites deployment succeeded, and seven unauthenticated HTTP checks returned 200. Every JSON, CSV, video, and subtitle payload matched the corresponding local file byte for byte. Receipts are recorded in `artifacts/publication-status.json` and `artifacts/http-validation.json`. Production browser QA confirmed the baseline, combined record search/filter, evidence dialog, and methodology; no browser console errors were observed.
 
-GitHub status: **not published**. The requested repository was publicly readable and empty when inspected. The browser session was signed in as Ajayyy00 and exposed no write/upload controls. No GitHub credential was available through Git Credential Manager in noninteractive mode. An actual push to `origin main` failed because authentication could not be obtained without prompting. Public-repository publication requires write access for an authenticated account; no account switching, new personal-access token, or permission expansion was performed. The complete source is committed locally and provided as `artifacts/mosaic-source.bundle` and `artifacts/mosaic-source.zip` for handoff.
+GitHub status: **published**. The repository is hosted at https://github.com/Devadharshini698/Mosaic under branch `main`. All source code, analysis engines, tests, and documentation are committed and pushed.
 
 Static deployment:
 

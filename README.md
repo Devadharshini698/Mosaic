@@ -6,7 +6,7 @@ A public marketing budget optimizer for the Mosaic Fellowship **Marketing Mix Op
 
 **App origin:** https://mosaic-mix-lab-devadharshini.ochre-deer-1487.chatgpt.site
 
-The app is live on OpenAI Sites with public, no-login access. Seven unauthenticated HTTP checks passed, including the app, all report endpoints, demo video, and subtitles. Consult `artifacts/http-validation.json` for the evidence. Publication to the requested GitHub repository is still blocked by unavailable authenticated write access.
+The app is live on OpenAI Sites with public, no-login access. Seven unauthenticated HTTP checks passed, including the app, all report endpoints, demo video, and subtitles. Consult `artifacts/http-validation.json` for the evidence. The complete repository is published to https://github.com/Devadharshini698/Mosaic.
 
 ## Results
 
