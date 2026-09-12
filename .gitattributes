@@ -1,0 +1,5 @@
+* text=auto eol=lf
+data/marketing_daily.json -text
+public/results/*.csv -text
+*.mp4 -text
+*.png -text

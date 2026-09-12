@@ -1,55 +1,1156 @@
-import React, {useEffect,useMemo,useRef,useState} from 'react';
-import {createRoot} from 'react-dom/client';
-import Decimal from 'decimal.js';
-import {ArrowDownToLine,ArrowUpRight,BarChart3,Check,ChevronLeft,ChevronRight,Database,FlaskConical,Layers3,Search,SlidersHorizontal,X} from 'lucide-react';
-import './style.css';
-Decimal.set({precision:60,rounding:Decimal.ROUND_HALF_UP});
-type Channel={channel:string;count:number;meanRoas:string;roasSum:string;weightedRoas:string;spend:string;revenue:string;cap:string|null;weekdayRoas:string;weekendRoas:string;quartiles:{quartile:number;count:number;meanSpend:string;roas:string}[];months:{month:number;count:number;roas:string}[]};
-type Scenario={allocation:Record<string,string>;revenue:Record<string,string>;total:string;sumRoundedRows:string;roundingAdjustment:string};
-type Report={source:{sha256:string;rowCount:number;acceptedRows:number;days:number;start:string;end:string};channels:Channel[];scenarios:Record<string,Scenario>;methodology:Record<string,string>;validation:{excludedRows:number;diagnosticCount:number}};
-type RecordRow={record_id:string;source_row:number;date:string;day_of_week:string;channel:string;spend:string;revenue:string;roas:string;impressions:string;clicks:string;conversions:string;new_customers:string;ctr:string;cpc:string;cpa:string;aov:string;expected_at_reported_roas:string;revenue_difference:string;explanation:string};
-type View='optimizer'|'channels'|'records'|'methodology';
-const colors=['#285eab','#be853b','#728bb0','#876ac1','#b75d88','#1c7967','#8d9c30','#d9774c','#39a898','#4e7084'];
-const money=(v:string|number|Decimal)=>'₹'+new Decimal(v).toNumber().toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
-const lakhs=(v:string|number)=>'₹'+(Number(v)/100000).toFixed(2)+'L';
-const x=(v:string)=>Number(v).toFixed(2)+'×';
-const download=(name:string,data:unknown)=>{const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);};
-function App(){
- const [report,setReport]=useState<Report|null>(null),[error,setError]=useState(''),[view,setView]=useState<View>((location.hash.slice(1) as View)||'optimizer');
- const [mode,setMode]=useState('proportional'),[alloc,setAlloc]=useState<Record<string,string>>({});
- const [rows,setRows]=useState<RecordRow[]>([]),[rowError,setRowError]=useState(''),[query,setQuery]=useState(''),[channel,setChannel]=useState('all'),[sort,setSort]=useState('date-desc'),[page,setPage]=useState(1),[selected,setSelected]=useState<RecordRow|null>(null);
- const [pattern,setPattern]=useState('Email'),[metric,setMetric]=useState('seasonal');const dialog=useRef<HTMLDialogElement>(null);
- useEffect(()=>{fetch('/results/report.json').then(r=>{if(!r.ok)throw Error('Report unavailable');return r.json();}).then((d:Report)=>{setReport(d);setAlloc(d.scenarios.proportional.allocation);}).catch(e=>setError(String(e)));},[]);
- useEffect(()=>{const change=()=>setView((['optimizer','channels','records','methodology'].includes(location.hash.slice(1))?location.hash.slice(1):'optimizer') as View);window.addEventListener('hashchange',change);return()=>window.removeEventListener('hashchange',change);},[]);
- useEffect(()=>{if(view==='records'&&!rows.length&&!rowError)fetch('/results/records.json').then(r=>{if(!r.ok)throw Error('Records unavailable');return r.json();}).then(setRows).catch(e=>setRowError(String(e)));},[view,rows.length,rowError]);
- useEffect(()=>{if(selected)dialog.current?.showModal();else dialog.current?.close();},[selected]);
- const filtered=useMemo(()=>{const list=rows.filter(r=>(channel==='all'||r.channel===channel)&&`${r.channel} ${r.date} ${r.source_row} ${r.day_of_week}`.toLowerCase().includes(query.toLowerCase()));return list.sort((a,b)=>sort==='date-desc'?b.date.localeCompare(a.date)||a.source_row-b.source_row:sort==='date-asc'?a.date.localeCompare(b.date)||a.source_row-b.source_row:Number(b[sort as keyof RecordRow])-Number(a[sort as keyof RecordRow]));},[rows,channel,query,sort]);
- if(error)return <div className="loading"><h1>Unable to load analysis</h1><p>{error}</p><button onClick={()=>location.reload()}>Retry</button></div>;
- if(!report)return <div className="loading"><FlaskConical/><h1>Opening Mix Lab…</h1></div>;
- const r=report;
- const amounts=Object.fromEntries(r.channels.map(c=>[c.channel,/^\d+(\.\d{0,2})?$/.test(alloc[c.channel]||'')?new Decimal(alloc[c.channel]):new Decimal(0)]));
- const spent=Decimal.sum(...Object.values(amounts));const remaining=new Decimal(5000000).sub(spent);
- const inputsValid=r.channels.every(c=>/^\d+(\.\d{0,2})?$/.test(alloc[c.channel]||''));
- const capViolations=r.channels.filter(c=>c.cap&&amounts[c.channel].gt(c.cap));
- const valid=inputsValid&&remaining.eq(0)&&capViolations.length===0;
- const returns=Object.fromEntries(r.channels.map(c=>[c.channel,amounts[c.channel].mul(new Decimal(c.roasSum).div(c.count))]));
- const total=Decimal.sum(...Object.values(returns));
- const scenario=r.scenarios[mode];const displayTotal=scenario?.total??total.toFixed(2);
- const correction=new Decimal(displayTotal).sub(Decimal.sum(...Object.values(returns).map(v=>v.toDecimalPlaces(2)))).toFixed(2);
- const preset=(value:string)=>{setMode(value);setAlloc({...r.scenarios[value].allocation});};
- const active=r.channels.find(c=>c.channel===pattern)!;
- const nav=[{id:'optimizer',label:'Budget optimizer',icon:SlidersHorizontal},{id:'channels',label:'Channel intelligence',icon:BarChart3},{id:'records',label:'Source records',icon:Database},{id:'methodology',label:'Methodology',icon:FlaskConical}];
- return <div className="app"><aside><a className="brand" href="#optimizer"><span className="brand-mark">m</span><span>Mosaic<span className="brand-sub">MIX LAB</span></span></a><p className="nav-label">MARKETING WORKSPACE</p><nav>{nav.map(n=><a key={n.id} href={'#'+n.id} aria-current={view===n.id?'page':undefined}><n.icon size={19}/>{n.label}</a>)}</nav><div className="dataset-card"><span className="small-icon"><Layers3 size={19}/></span><strong>One dataset. Every decision.</strong><p>10,950 daily observations<br/>10 marketing channels</p><a href="https://mosaicfellowship.in/challenge" target="_blank" rel="noreferrer">Official challenge <ArrowUpRight size={14}/></a></div><div className="side-footer">MOSAIC FELLOWSHIP <span>BUILDER CHALLENGE / 07</span></div></aside>
- <div className="workspace"><header><span>Marketing <span className="slash">/</span> {nav.find(n=>n.id===view)?.label}</span><a href="/results/report.json" download><ArrowDownToLine size={16}/> Export analysis</a></header><main>
- <div className="page-heading"><div><p className="eyebrow">{view==='optimizer'?'MAKE EVERY RUPEE COUNT':view==='channels'?'UNDERSTAND THE RETURNS':view==='records'?'FOLLOW THE EVIDENCE':'TRANSPARENT BY DESIGN'}</p><h1>{view==='optimizer'?'A smarter marketing mix.':view==='channels'?'Ten channels. Different rhythms.':view==='records'?'The data behind the decision.':'From daily rows to a monthly plan.'}</h1><p>{view==='optimizer'?'Allocate ₹50 lakh across ten channels. Compare the brief’s baseline with the linear maximum.':view==='channels'?'Explore returns, spend sensitivity, and seasonal patterns in the complete dataset.':view==='records'?'Search every official observation and inspect the original values.':'Every assumption, constraint, and rounding choice is open to inspection.'}</p></div><span className="verified"><Check size={14}/> Full dataset verified</span></div>
- {view==='optimizer'&&<><section className="summary-grid"><div className="result-card"><div className="result-top"><span>EXPECTED MONTHLY REVENUE</span><span className="pill">{mode==='proportional'?'Suggested baseline':mode==='linear'?'Linear maximum':'Custom scenario'}</span></div><div className="result-number">{money(displayTotal)}</div><div className="result-bottom"><span>{x(new Decimal(displayTotal).div(spent.eq(0)?1:spent).toString())} blended ROAS</span><span>{valid?'₹50L fully allocated':'Draft · allocation needs attention'}</span></div></div><div className="stat-card"><span>MONTHLY BUDGET</span><strong>₹50,00,000<span>.00</span></strong><p>Fixed planning envelope</p><div className="mini-meter"><i style={{width:Math.min(100,spent.div(5000000).mul(100).toNumber())+'%'}}/></div></div><div className="stat-card"><span>DATA COVERAGE</span><strong>10,950 <span>rows</span></strong><p>1,095 days · 10 channels</p><div className="date-range">Jan 2023 — Dec 2025</div></div></section>
- <section className="optimizer-grid"><div className="panel allocation-panel"><div className="panel-heading"><div><h2>Your allocation</h2><p>Select a strategy, then fine-tune each channel.</p></div><button className="icon-button" aria-label="Download current allocation" onClick={()=>download('mosaic-scenario.json',{mode,valid,budget:'5000000.00',allocation:alloc,revenue:Object.fromEntries(Object.entries(returns).map(([c,v])=>[c,v.toFixed(2)])),roundingAdjustment:correction,total:displayTotal})}><ArrowDownToLine size={18}/></button></div><div className="segmented"><button aria-pressed={mode==='proportional'} onClick={()=>preset('proportional')}>ROAS proportional</button><button aria-pressed={mode==='linear'} onClick={()=>preset('linear')}>Linear maximum <ArrowUpRight size={14}/></button></div><div className="allocation-labels"><span>CHANNEL / AVG. ROAS</span><span>MONTHLY ALLOCATION</span></div><div className="allocation-rows">{r.channels.map((c,i)=><div className="allocation-row" key={c.channel}><div className="channel-label"><span className="channel-dot" style={{background:colors[i]}}/><div><strong>{c.channel}</strong><span>{x(c.meanRoas)}{c.cap&&<> <em>Cap {lakhs(c.cap)}</em></>}</span></div></div><div className="allocation-control"><div className="money-input"><span>₹</span><input type="text" inputMode="decimal" aria-label={c.channel+' allocation'} value={alloc[c.channel]??''} onChange={e=>{setMode('custom');setAlloc({...alloc,[c.channel]:e.target.value});}}/></div><input type="range" aria-label={c.channel+' budget slider'} min="0" max={c.cap??5000000} step="1000" value={amounts[c.channel].toNumber()} style={{accentColor:colors[i]}} onChange={e=>{setMode('custom');setAlloc({...alloc,[c.channel]:e.target.value});}}/></div></div>)}</div><div className={'budget-status '+(!valid?'warning':'')}><span>{valid?<Check size={16}/>:<SlidersHorizontal size={16}/>} {valid?'Budget reconciled':!inputsValid?'Enter nonnegative rupees with at most 2 decimals':capViolations.length?'Cap exceeded: '+capViolations.map(c=>c.channel).join(','):remaining.lt(0)?'Over budget':'Remaining to allocate'}</span><strong>{money(remaining)}</strong></div></div>
- <div className="right-stack"><div className="panel contribution-panel"><div className="panel-heading"><div><h2>Where the returns come from</h2><p>Expected revenue by channel</p></div><span className="unit-label">INR LAKH</span></div><div className="contribution-chart">{[...r.channels].sort((a,b)=>returns[b.channel].cmp(returns[a.channel])).map(c=><div className="contribution" key={c.channel}><span>{c.channel}</span><div className="bar-track"><i style={{width:Math.max(0,returns[c.channel].div(Decimal.max(...Object.values(returns),1)).mul(100).toNumber())+'%',background:colors[r.channels.indexOf(c)]}}/></div><strong>{lakhs(returns[c.channel].toString())}</strong></div>)}</div><div className="chart-note">Revenue = monthly allocation × mean daily ROAS</div></div><div className="insight"><div className="insight-icon"><FlaskConical size={22}/></div><div><h3>A baseline is not a maximum.</h3><p>The brief suggests spreading budget in proportion to ROAS. With constant returns, the mathematical maximum concentrates spend in Email, SMS, and Affiliate.</p><div className="comparison"><span>Linear maximum <strong>{money(r.scenarios.linear.total)}</strong></span><span>Above baseline <strong>+{new Decimal(r.scenarios.linear.total).div(r.scenarios.proportional.total).sub(1).mul(100).toFixed(1)}%</strong></span></div><a href="#methodology">Understand the assumptions <ArrowUpRight size={15}/></a></div></div><p className="muted-note">Scenario estimates use historical averages. Spend saturation, incrementality, and future demand are not modeled.</p></div></section>
- <section className="panel"><div className="panel-heading"><div><h2>Every rupee, reconciled</h2><p>Full precision for calculation. Two decimals for reporting.</p></div><a className="button-link" href="/results/allocation.csv" download><ArrowDownToLine size={16}/> Preset CSV</a></div><div className="table-scroll"><table><thead><tr><th>Channel</th><th>Avg. ROAS</th><th>Allocation</th><th>Budget share</th><th>Expected revenue</th></tr></thead><tbody>{r.channels.map((c,i)=><tr key={c.channel}><td><span className="channel-dot" style={{background:colors[i]}}/>{c.channel}</td><td>{x(c.meanRoas)}</td><td>{money(amounts[c.channel])}</td><td>{amounts[c.channel].div(5000000).mul(100).toFixed(2)}%</td><td>{money(returns[c.channel])}</td></tr>)}<tr className="adjustment"><td colSpan={4}>Rounding adjustment (rounded total less rounded rows)</td><td>{money(correction)}</td></tr><tr className="total-row"><td colSpan={2}>Total</td><td>{money(spent)}</td><td>{spent.div(5000000).mul(100).toFixed(2)}%</td><td>{money(displayTotal)}</td></tr></tbody></table></div></section></>}
- {view==='channels'&&<><div className="panel"><div className="panel-heading"><div><h2>Return on ad spend</h2><p>Arithmetic mean of supplied daily ROAS, compared with revenue ÷ spend.</p></div></div><div className="rank-chart">{[...r.channels].sort((a,b)=>Number(b.meanRoas)-Number(a.meanRoas)).map(c=><button key={c.channel} onClick={()=>setPattern(c.channel)} aria-pressed={pattern===c.channel}><span>{c.channel}</span><div><i style={{width:Number(c.meanRoas)*10+'%',background:colors[r.channels.indexOf(c)]}}/></div><strong>{x(c.meanRoas)}</strong><small>Weighted {x(c.weightedRoas)}</small></button>)}</div></div><section className="panel pattern-panel"><div className="panel-heading"><div><h2>{pattern}: the shape of performance</h2><p>Descriptive patterns, not estimates of causal response.</p></div><select aria-label="Pattern channel" value={pattern} onChange={e=>setPattern(e.target.value)}>{r.channels.map(c=><option key={c.channel}>{c.channel}</option>)}</select></div><div className="segmented compact">{[['seasonal','Seasonality'],['spend','Spend sensitivity'],['weekday','Weekday / weekend']].map(([id,label])=><button key={id} aria-pressed={metric===id} onClick={()=>setMetric(id)}>{label}</button>)}</div><div className="vertical-chart">{(metric==='seasonal'?active.months.map(m=>({label:new Date(2024,m.month-1,1).toLocaleString('en',{month:'short'}),value:m.roas,detail:m.count+' days'})):metric==='spend'?active.quartiles.map(q=>({label:'Q'+q.quartile,value:q.roas,detail:lakhs(q.meanSpend)+' avg/day'})):[{label:'Weekday',value:active.weekdayRoas,detail:'Monday–Friday'},{label:'Weekend',value:active.weekendRoas,detail:'Saturday–Sunday'}]).map(d=><div className="vertical-column" key={d.label}><strong>{x(d.value)}</strong><div className="vertical-track"><i style={{height:Number(d.value)/Math.max(...(metric==='seasonal'?active.months.map(m=>Number(m.roas)):metric==='spend'?active.quartiles.map(q=>Number(q.roas)):[Number(active.weekdayRoas),Number(active.weekendRoas)]),1)*100+'%'}}/></div><span>{d.label}</span><small>{d.detail}</small></div>)}</div><div className="chart-note">{metric==='seasonal'?'Calendar-month means pool all three years; counts differ with month length and leap day.':metric==='spend'?'Daily spend is sorted into four equal-count bins. Q1 is lowest spend; Q4 is highest. Associations can reflect seasonality and channel targeting.':'Daily observations are grouped using verified calendar weekdays. All available dates are included.'}</div></section><div className="insight full"><FlaskConical/><p><strong>Use the pattern, respect the limit.</strong> The challenge’s revenue formula holds ROAS constant. These charts expose where that simplification may be fragile; they do not fit a saturation curve or claim incremental lift.</p></div></>}
- {view==='records'&&<section className="panel"><div className="panel-heading"><div><h2>Daily observations <span className="count-pill">{r.source.rowCount.toLocaleString()}</span></h2><p>Original data with a reproducible rounding diagnostic.</p></div><a className="button-link" href="/results/records.csv" download><ArrowDownToLine size={16}/> All records CSV</a></div><div className="filters"><label className="search-box"><Search size={18}/><input aria-label="Search records" placeholder="Search channel, date, or row…" value={query} onChange={e=>{setQuery(e.target.value);setPage(1);}}/></label><select aria-label="Filter channel" value={channel} onChange={e=>{setChannel(e.target.value);setPage(1);}}><option value="all">All channels</option>{r.channels.map(c=><option key={c.channel}>{c.channel}</option>)}</select><select aria-label="Sort records" value={sort} onChange={e=>{setSort(e.target.value);setPage(1);}}><option value="date-desc">Newest first</option><option value="date-asc">Oldest first</option><option value="spend">Highest spend</option><option value="revenue">Highest revenue</option><option value="roas">Highest ROAS</option></select></div>{rowError?<p role="alert">{rowError}</p>:!rows.length?<p className="empty-state">Loading all official records…</p>:<><div className="table-scroll"><table className="records-table"><thead><tr><th>Date / source row</th><th>Channel</th><th>Spend</th><th>Recorded revenue</th><th>ROAS</th><th>Evidence</th></tr></thead><tbody>{filtered.slice((page-1)*15,page*15).map(row=><tr key={row.record_id}><td>{row.date}<small>{row.day_of_week} · Row {row.source_row}</small></td><td>{row.channel}</td><td>{money(row.spend)}</td><td>{money(row.revenue)}</td><td>{x(row.roas)}</td><td><button className="text-button" onClick={()=>setSelected(row)} aria-label={'Open row '+row.source_row}>View <ArrowUpRight size={15}/></button></td></tr>)}</tbody></table></div>{!filtered.length&&<p className="empty-state">No records match these filters. Try another date or channel.</p>}<div className="pagination"><span>{filtered.length?`${(page-1)*15+1}–${Math.min(page*15,filtered.length)}`:'0'} of {filtered.length.toLocaleString()} records</span><div><button aria-label="Previous page" disabled={page===1} onClick={()=>setPage(page-1)}><ChevronLeft size={17}/></button><span>Page {page} of {Math.max(1,Math.ceil(filtered.length/15))}</span><button aria-label="Next page" disabled={page*15>=filtered.length} onClick={()=>setPage(page+1)}><ChevronRight size={17}/></button></div></div></>}</section>}
- {view==='methodology'&&<><div className="method-hero"><div><span className="eyebrow">THE RECONCILIATION</span><h2>Same evidence.<br/>Two allocation conventions.</h2><p>The official brief suggests a proportional split and asks for an optimal one. We preserve both interpretations so the answer can be reviewed.</p></div><div><span>Suggested proportional · paise-executable</span><strong>{money(r.scenarios.proportional.total)}</strong><span>Constant-ROAS linear maximum</span><strong>{money(r.scenarios.linear.total)}</strong></div></div><div className="method-grid">{[['01','Source & coverage','The official marketing_daily.json is the only production input. All 10,950 rows are processed: 1,095 dates × 10 channels. Dates run from 1 January 2023 to 30 December 2025, including leap day; this is not three complete calendar years.'],['02','Validate before aggregating','Validate required fields, finite nonnegative values, integer counts, monetary precision, dates, weekdays, channel names, uniqueness, and complete date/channel coverage. Exact duplicates are excluded once; conflicting duplicates are quarantined. Missing coverage fails the analysis.'],['03','One consistent ROAS definition',r.methodology.mean],['04','Proportional baseline',r.methodology.proportional],['05','Linear maximum',r.methodology.linear+' Email receives ₹15L, SMS ₹12L, and Affiliate the remaining ₹23L. An exchange from a lower-ROAS channel to a higher one increases the objective until a cap binds.'],['06','Exact money & reconciliation',r.methodology.rounding+' The proportional row totals reconcile with ₹0.00 adjustment. The linear rows require a −₹0.01 adjustment.'],['07','A separate rounding convention','Allowing fractional paise in proportional allocations produces ₹2,65,68,802.44, versus ₹2,65,68,802.42 with whole-paise allocations. Both were independently reconciled. The app uses deployable allocations in whole paise; average ROAS is never rounded before multiplication.'],['08','What this model does not claim','This is a constant-return allocation exercise. Descriptive spend quartiles, weekdays, and monthly means show associations, not causality. It does not account for saturation, attribution overlap, or future demand. No agreement with a private answer key is claimed.']].map(([n,title,body])=><article className="panel method-card" key={n}><span className="step">{n}</span><h3>{title}</h3><p>{body}</p></article>)}</div><div className="panel provenance"><h2>Source provenance</h2><dl><dt>Accepted / excluded</dt><dd>{r.source.acceptedRows.toLocaleString()} / {r.validation.excludedRows}</dd><dt>Missing date/channel pairs</dt><dd>0</dd><dt>ROAS discrepancies beyond rounding</dt><dd>{r.validation.diagnosticCount}</dd><dt>SHA-256 · original file bytes</dt><dd className="hash">{r.source.sha256}</dd></dl><div className="links"><a href="https://mosaicfellowship.in/data/marketing_daily.json">Official dataset <ArrowUpRight size={15}/></a><a href="/results/report.json" download>Analysis JSON <ArrowDownToLine size={15}/></a><a href="/results/records.json" download>Record evidence JSON <ArrowDownToLine size={15}/></a></div></div></>}
- <footer><span>Mosaic Mix Lab <span className="slash">/</span> Official data. Reproducible decisions.</span><span>Historical estimates · INR</span></footer></main></div>
- <dialog ref={dialog} onCancel={()=>setSelected(null)} onClick={e=>{if(e.target===dialog.current)setSelected(null);}}>{selected&&<><div className="dialog-heading"><div><p className="eyebrow">SOURCE ROW {selected.source_row}</p><h2>{selected.channel}</h2><p>{selected.date} · {selected.day_of_week}</p></div><button className="icon-button" aria-label="Close record" onClick={()=>setSelected(null)}><X/></button></div><div className="evidence-cards"><div><span>Recorded spend</span><strong>{money(selected.spend)}</strong></div><div><span>Recorded revenue</span><strong>{money(selected.revenue)}</strong></div><div><span>Spend × reported ROAS</span><strong>{money(selected.expected_at_reported_roas)}</strong></div><div><span>Revenue difference</span><strong>{money(selected.revenue_difference)}</strong></div></div><div className="evidence-explanation"><strong>Why the values can differ</strong><p>{selected.explanation}</p><code>{money(selected.spend)} × {selected.roas} = {money(selected.expected_at_reported_roas)}</code></div><dl className="record-metrics">{[['Impressions',selected.impressions],['Clicks',selected.clicks],['Conversions',selected.conversions],['New customers',selected.new_customers],['CTR (%)',selected.ctr],['CPC (₹)',selected.cpc],['CPA (₹)',selected.cpa],['AOV (₹)',selected.aov]].map(([label,value])=><div key={label}><dt>{label}</dt><dd>{Number(value).toLocaleString('en-IN')}</dd></div>)}</dl><button className="primary-button" onClick={()=>download('record-'+selected.source_row+'.json',selected)}><ArrowDownToLine size={16}/> Download record evidence</button></>}</dialog></div>;
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
+import Decimal from "decimal.js";
+import {
+  ArrowDownToLine,
+  ArrowUpRight,
+  BarChart3,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Database,
+  FlaskConical,
+  Layers3,
+  Search,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
+import "./style.css";
+Decimal.set({ precision: 60, rounding: Decimal.ROUND_HALF_UP });
+type Channel = {
+  channel: string;
+  count: number;
+  meanRoas: string;
+  roasSum: string;
+  weightedRoas: string;
+  spend: string;
+  revenue: string;
+  cap: string | null;
+  weekdayRoas: string;
+  weekendRoas: string;
+  quartiles: {
+    quartile: number;
+    count: number;
+    meanSpend: string;
+    roas: string;
+  }[];
+  months: { month: number; count: number; roas: string }[];
+};
+type Scenario = {
+  allocation: Record<string, string>;
+  revenue: Record<string, string>;
+  total: string;
+  sumRoundedRows: string;
+  roundingAdjustment: string;
+};
+type Report = {
+  source: {
+    sha256: string;
+    rowCount: number;
+    acceptedRows: number;
+    days: number;
+    start: string;
+    end: string;
+  };
+  channels: Channel[];
+  scenarios: Record<string, Scenario>;
+  methodology: Record<string, string>;
+  validation: { excludedRows: number; diagnosticCount: number };
+};
+type RecordRow = {
+  record_id: string;
+  source_row: number;
+  date: string;
+  day_of_week: string;
+  channel: string;
+  spend: string;
+  revenue: string;
+  roas: string;
+  impressions: string;
+  clicks: string;
+  conversions: string;
+  new_customers: string;
+  ctr: string;
+  cpc: string;
+  cpa: string;
+  aov: string;
+  expected_at_reported_roas: string;
+  revenue_difference: string;
+  explanation: string;
+};
+type View = "optimizer" | "channels" | "records" | "methodology";
+const colors = [
+  "#285eab",
+  "#be853b",
+  "#728bb0",
+  "#876ac1",
+  "#b75d88",
+  "#1c7967",
+  "#8d9c30",
+  "#d9774c",
+  "#39a898",
+  "#4e7084",
+];
+const money = (v: string | number | Decimal) =>
+  "₹" +
+  new Decimal(v)
+    .toNumber()
+    .toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+const lakhs = (v: string | number) =>
+  "₹" + (Number(v) / 100000).toFixed(2) + "L";
+const x = (v: string) => Number(v).toFixed(2) + "×";
+const download = (name: string, data: unknown) => {
+  const url = URL.createObjectURL(
+    new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+function App() {
+  const [report, setReport] = useState<Report | null>(null),
+    [error, setError] = useState(""),
+    [view, setView] = useState<View>(
+      (location.hash.slice(1) as View) || "optimizer",
+    );
+  const [mode, setMode] = useState("proportional"),
+    [alloc, setAlloc] = useState<Record<string, string>>({});
+  const [rows, setRows] = useState<RecordRow[]>([]),
+    [rowError, setRowError] = useState(""),
+    [query, setQuery] = useState(""),
+    [channel, setChannel] = useState("all"),
+    [sort, setSort] = useState("date-desc"),
+    [page, setPage] = useState(1),
+    [selected, setSelected] = useState<RecordRow | null>(null);
+  const [pattern, setPattern] = useState("Email"),
+    [metric, setMetric] = useState("seasonal");
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    fetch("/results/report.json")
+      .then((r) => {
+        if (!r.ok) throw Error("Report unavailable");
+        return r.json();
+      })
+      .then((d: Report) => {
+        setReport(d);
+        setAlloc(d.scenarios.proportional.allocation);
+      })
+      .catch((e) => setError(String(e)));
+  }, []);
+  useEffect(() => {
+    const change = () =>
+      setView(
+        (["optimizer", "channels", "records", "methodology"].includes(
+          location.hash.slice(1),
+        )
+          ? location.hash.slice(1)
+          : "optimizer") as View,
+      );
+    window.addEventListener("hashchange", change);
+    return () => window.removeEventListener("hashchange", change);
+  }, []);
+  useEffect(() => {
+    if (view === "records" && !rows.length && !rowError)
+      fetch("/results/records.json")
+        .then((r) => {
+          if (!r.ok) throw Error("Records unavailable");
+          return r.json();
+        })
+        .then(setRows)
+        .catch((e) => setRowError(String(e)));
+  }, [view, rows.length, rowError]);
+  useEffect(() => {
+    if (selected) dialog.current?.showModal();
+    else dialog.current?.close();
+  }, [selected]);
+  const filtered = useMemo(() => {
+    const list = rows.filter(
+      (r) =>
+        (channel === "all" || r.channel === channel) &&
+        `${r.channel} ${r.date} ${r.source_row} ${r.day_of_week}`
+          .toLowerCase()
+          .includes(query.toLowerCase()),
+    );
+    return list.sort((a, b) =>
+      sort === "date-desc"
+        ? b.date.localeCompare(a.date) || a.source_row - b.source_row
+        : sort === "date-asc"
+          ? a.date.localeCompare(b.date) || a.source_row - b.source_row
+          : Number(b[sort as keyof RecordRow]) -
+            Number(a[sort as keyof RecordRow]),
+    );
+  }, [rows, channel, query, sort]);
+  if (error)
+    return (
+      <div className="loading">
+        <h1>Unable to load analysis</h1>
+        <p>{error}</p>
+        <button onClick={() => location.reload()}>Retry</button>
+      </div>
+    );
+  if (!report)
+    return (
+      <div className="loading">
+        <FlaskConical />
+        <h1>Opening Mix Lab…</h1>
+      </div>
+    );
+  const r = report;
+  const amounts = Object.fromEntries(
+    r.channels.map((c) => [
+      c.channel,
+      /^\d+(\.\d{0,2})?$/.test(alloc[c.channel] || "")
+        ? new Decimal(alloc[c.channel])
+        : new Decimal(0),
+    ]),
+  );
+  const spent = Decimal.sum(...Object.values(amounts));
+  const remaining = new Decimal(5000000).sub(spent);
+  const inputsValid = r.channels.every((c) =>
+    /^\d+(\.\d{0,2})?$/.test(alloc[c.channel] || ""),
+  );
+  const capViolations = r.channels.filter(
+    (c) => c.cap && amounts[c.channel].gt(c.cap),
+  );
+  const valid = inputsValid && remaining.eq(0) && capViolations.length === 0;
+  const returns = Object.fromEntries(
+    r.channels.map((c) => [
+      c.channel,
+      amounts[c.channel].mul(new Decimal(c.roasSum).div(c.count)),
+    ]),
+  );
+  const total = Decimal.sum(...Object.values(returns));
+  const scenario = r.scenarios[mode];
+  const displayTotal = scenario?.total ?? total.toFixed(2);
+  const correction = new Decimal(displayTotal)
+    .sub(
+      Decimal.sum(...Object.values(returns).map((v) => v.toDecimalPlaces(2))),
+    )
+    .toFixed(2);
+  const preset = (value: string) => {
+    setMode(value);
+    setAlloc({ ...r.scenarios[value].allocation });
+  };
+  const active = r.channels.find((c) => c.channel === pattern)!;
+  const nav = [
+    { id: "optimizer", label: "Budget optimizer", icon: SlidersHorizontal },
+    { id: "channels", label: "Channel intelligence", icon: BarChart3 },
+    { id: "records", label: "Source records", icon: Database },
+    { id: "methodology", label: "Methodology", icon: FlaskConical },
+  ];
+  return (
+    <div className="app">
+      <aside>
+        <a className="brand" href="#optimizer">
+          <span className="brand-mark">m</span>
+          <span>
+            Mosaic<span className="brand-sub">MIX LAB</span>
+          </span>
+        </a>
+        <p className="nav-label">MARKETING WORKSPACE</p>
+        <nav>
+          {nav.map((n) => (
+            <a
+              key={n.id}
+              href={"#" + n.id}
+              aria-current={view === n.id ? "page" : undefined}
+            >
+              <n.icon size={19} />
+              {n.label}
+            </a>
+          ))}
+        </nav>
+        <div className="dataset-card">
+          <span className="small-icon">
+            <Layers3 size={19} />
+          </span>
+          <strong>One dataset. Every decision.</strong>
+          <p>
+            10,950 daily observations
+            <br />
+            10 marketing channels
+          </p>
+          <a
+            href="https://mosaicfellowship.in/challenge"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Official challenge <ArrowUpRight size={14} />
+          </a>
+        </div>
+        <div className="side-footer">
+          MOSAIC FELLOWSHIP <span>BUILDER CHALLENGE / 07</span>
+        </div>
+      </aside>
+      <div className="workspace">
+        <header>
+          <span>
+            Marketing <span className="slash">/</span>{" "}
+            {nav.find((n) => n.id === view)?.label}
+          </span>
+          <a href="/results/report.json" download>
+            <ArrowDownToLine size={16} /> Export analysis
+          </a>
+        </header>
+        <main>
+          <div className="page-heading">
+            <div>
+              <p className="eyebrow">
+                {view === "optimizer"
+                  ? "MAKE EVERY RUPEE COUNT"
+                  : view === "channels"
+                    ? "UNDERSTAND THE RETURNS"
+                    : view === "records"
+                      ? "FOLLOW THE EVIDENCE"
+                      : "TRANSPARENT BY DESIGN"}
+              </p>
+              <h1>
+                {view === "optimizer"
+                  ? "A smarter marketing mix."
+                  : view === "channels"
+                    ? "Ten channels. Different rhythms."
+                    : view === "records"
+                      ? "The data behind the decision."
+                      : "From daily rows to a monthly plan."}
+              </h1>
+              <p>
+                {view === "optimizer"
+                  ? "Allocate ₹50 lakh across ten channels. Compare the brief’s baseline with the linear maximum."
+                  : view === "channels"
+                    ? "Explore returns, spend sensitivity, and seasonal patterns in the complete dataset."
+                    : view === "records"
+                      ? "Search every official observation and inspect the original values."
+                      : "Every assumption, constraint, and rounding choice is open to inspection."}
+              </p>
+            </div>
+            <span className="verified">
+              <Check size={14} /> Full dataset verified
+            </span>
+          </div>
+          {view === "optimizer" && (
+            <>
+              <section className="summary-grid">
+                <div className="result-card">
+                  <div className="result-top">
+                    <span>EXPECTED MONTHLY REVENUE</span>
+                    <span className="pill">
+                      {mode === "proportional"
+                        ? "Suggested baseline"
+                        : mode === "linear"
+                          ? "Linear maximum"
+                          : "Custom scenario"}
+                    </span>
+                  </div>
+                  <div className="result-number">{money(displayTotal)}</div>
+                  <div className="result-bottom">
+                    <span>
+                      {x(
+                        new Decimal(displayTotal)
+                          .div(spent.eq(0) ? 1 : spent)
+                          .toString(),
+                      )}{" "}
+                      blended ROAS
+                    </span>
+                    <span>
+                      {valid
+                        ? "₹50L fully allocated"
+                        : "Draft · allocation needs attention"}
+                    </span>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <span>MONTHLY BUDGET</span>
+                  <strong>
+                    ₹50,00,000<span>.00</span>
+                  </strong>
+                  <p>Fixed planning envelope</p>
+                  <div className="mini-meter">
+                    <i
+                      style={{
+                        width:
+                          Math.min(
+                            100,
+                            spent.div(5000000).mul(100).toNumber(),
+                          ) + "%",
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <span>DATA COVERAGE</span>
+                  <strong>
+                    10,950 <span>rows</span>
+                  </strong>
+                  <p>1,095 days · 10 channels</p>
+                  <div className="date-range">Jan 2023 — Dec 2025</div>
+                </div>
+              </section>
+              <section className="optimizer-grid">
+                <div className="panel allocation-panel">
+                  <div className="panel-heading">
+                    <div>
+                      <h2>Your allocation</h2>
+                      <p>Select a strategy, then fine-tune each channel.</p>
+                    </div>
+                    <button
+                      className="icon-button"
+                      aria-label="Download current allocation"
+                      onClick={() =>
+                        download("mosaic-scenario.json", {
+                          mode,
+                          valid,
+                          budget: "5000000.00",
+                          allocation: alloc,
+                          revenue: Object.fromEntries(
+                            Object.entries(returns).map(([c, v]) => [
+                              c,
+                              v.toFixed(2),
+                            ]),
+                          ),
+                          roundingAdjustment: correction,
+                          total: displayTotal,
+                        })
+                      }
+                    >
+                      <ArrowDownToLine size={18} />
+                    </button>
+                  </div>
+                  <div className="segmented">
+                    <button
+                      aria-pressed={mode === "proportional"}
+                      onClick={() => preset("proportional")}
+                    >
+                      ROAS proportional
+                    </button>
+                    <button
+                      aria-pressed={mode === "linear"}
+                      onClick={() => preset("linear")}
+                    >
+                      Linear maximum <ArrowUpRight size={14} />
+                    </button>
+                  </div>
+                  <div className="allocation-labels">
+                    <span>CHANNEL / AVG. ROAS</span>
+                    <span>MONTHLY ALLOCATION</span>
+                  </div>
+                  <div className="allocation-rows">
+                    {r.channels.map((c, i) => (
+                      <div className="allocation-row" key={c.channel}>
+                        <div className="channel-label">
+                          <span
+                            className="channel-dot"
+                            style={{ background: colors[i] }}
+                          />
+                          <div>
+                            <strong>{c.channel}</strong>
+                            <span>
+                              {x(c.meanRoas)}
+                              {c.cap && (
+                                <>
+                                  {" "}
+                                  <em>Cap {lakhs(c.cap)}</em>
+                                </>
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="allocation-control">
+                          <div className="money-input">
+                            <span>₹</span>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              aria-label={c.channel + " allocation"}
+                              value={alloc[c.channel] ?? ""}
+                              onChange={(e) => {
+                                setMode("custom");
+                                setAlloc({
+                                  ...alloc,
+                                  [c.channel]: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <input
+                            type="range"
+                            aria-label={c.channel + " budget slider"}
+                            min="0"
+                            max={c.cap ?? 5000000}
+                            step="1000"
+                            value={amounts[c.channel].toNumber()}
+                            style={{ accentColor: colors[i] }}
+                            onChange={(e) => {
+                              setMode("custom");
+                              setAlloc({
+                                ...alloc,
+                                [c.channel]: e.target.value,
+                              });
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className={"budget-status " + (!valid ? "warning" : "")}>
+                    <span>
+                      {valid ? (
+                        <Check size={16} />
+                      ) : (
+                        <SlidersHorizontal size={16} />
+                      )}{" "}
+                      {valid
+                        ? "Budget reconciled"
+                        : !inputsValid
+                          ? "Enter nonnegative rupees with at most 2 decimals"
+                          : capViolations.length
+                            ? "Cap exceeded: " +
+                              capViolations.map((c) => c.channel).join(",")
+                            : remaining.lt(0)
+                              ? "Over budget"
+                              : "Remaining to allocate"}
+                    </span>
+                    <strong>{money(remaining)}</strong>
+                  </div>
+                </div>
+                <div className="right-stack">
+                  <div className="panel contribution-panel">
+                    <div className="panel-heading">
+                      <div>
+                        <h2>Where the returns come from</h2>
+                        <p>Expected revenue by channel</p>
+                      </div>
+                      <span className="unit-label">INR LAKH</span>
+                    </div>
+                    <div className="contribution-chart">
+                      {[...r.channels]
+                        .sort((a, b) =>
+                          returns[b.channel].cmp(returns[a.channel]),
+                        )
+                        .map((c) => (
+                          <div className="contribution" key={c.channel}>
+                            <span>{c.channel}</span>
+                            <div className="bar-track">
+                              <i
+                                style={{
+                                  width:
+                                    Math.max(
+                                      0,
+                                      returns[c.channel]
+                                        .div(
+                                          Decimal.max(
+                                            ...Object.values(returns),
+                                            1,
+                                          ),
+                                        )
+                                        .mul(100)
+                                        .toNumber(),
+                                    ) + "%",
+                                  background: colors[r.channels.indexOf(c)],
+                                }}
+                              />
+                            </div>
+                            <strong>
+                              {lakhs(returns[c.channel].toString())}
+                            </strong>
+                          </div>
+                        ))}
+                    </div>
+                    <div className="chart-note">
+                      Revenue = monthly allocation × mean daily ROAS
+                    </div>
+                  </div>
+                  <div className="insight">
+                    <div className="insight-icon">
+                      <FlaskConical size={22} />
+                    </div>
+                    <div>
+                      <h3>A baseline is not a maximum.</h3>
+                      <p>
+                        The brief suggests spreading budget in proportion to
+                        ROAS. With constant returns, the mathematical maximum
+                        concentrates spend in Email, SMS, and Affiliate.
+                      </p>
+                      <div className="comparison">
+                        <span>
+                          Linear maximum{" "}
+                          <strong>{money(r.scenarios.linear.total)}</strong>
+                        </span>
+                        <span>
+                          Above baseline{" "}
+                          <strong>
+                            +
+                            {new Decimal(r.scenarios.linear.total)
+                              .div(r.scenarios.proportional.total)
+                              .sub(1)
+                              .mul(100)
+                              .toFixed(1)}
+                            %
+                          </strong>
+                        </span>
+                      </div>
+                      <a href="#methodology">
+                        Understand the assumptions <ArrowUpRight size={15} />
+                      </a>
+                    </div>
+                  </div>
+                  <p className="muted-note">
+                    Scenario estimates use historical averages. Spend
+                    saturation, incrementality, and future demand are not
+                    modeled.
+                  </p>
+                </div>
+              </section>
+              <section className="panel">
+                <div className="panel-heading">
+                  <div>
+                    <h2>Every rupee, reconciled</h2>
+                    <p>
+                      Full precision for calculation. Two decimals for
+                      reporting.
+                    </p>
+                  </div>
+                  <a
+                    className="button-link"
+                    href="/results/allocation.csv"
+                    download
+                  >
+                    <ArrowDownToLine size={16} /> Preset CSV
+                  </a>
+                </div>
+                <div className="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Channel</th>
+                        <th>Avg. ROAS</th>
+                        <th>Allocation</th>
+                        <th>Budget share</th>
+                        <th>Expected revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {r.channels.map((c, i) => (
+                        <tr key={c.channel}>
+                          <td>
+                            <span
+                              className="channel-dot"
+                              style={{ background: colors[i] }}
+                            />
+                            {c.channel}
+                          </td>
+                          <td>{x(c.meanRoas)}</td>
+                          <td>{money(amounts[c.channel])}</td>
+                          <td>
+                            {amounts[c.channel]
+                              .div(5000000)
+                              .mul(100)
+                              .toFixed(2)}
+                            %
+                          </td>
+                          <td>{money(returns[c.channel])}</td>
+                        </tr>
+                      ))}
+                      <tr className="adjustment">
+                        <td colSpan={4}>
+                          Rounding adjustment (rounded total less rounded rows)
+                        </td>
+                        <td>{money(correction)}</td>
+                      </tr>
+                      <tr className="total-row">
+                        <td colSpan={2}>Total</td>
+                        <td>{money(spent)}</td>
+                        <td>{spent.div(5000000).mul(100).toFixed(2)}%</td>
+                        <td>{money(displayTotal)}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </>
+          )}
+          {view === "channels" && (
+            <>
+              <div className="panel">
+                <div className="panel-heading">
+                  <div>
+                    <h2>Return on ad spend</h2>
+                    <p>
+                      Arithmetic mean of supplied daily ROAS, compared with
+                      revenue ÷ spend.
+                    </p>
+                  </div>
+                </div>
+                <div className="rank-chart">
+                  {[...r.channels]
+                    .sort((a, b) => Number(b.meanRoas) - Number(a.meanRoas))
+                    .map((c) => (
+                      <button
+                        key={c.channel}
+                        onClick={() => setPattern(c.channel)}
+                        aria-pressed={pattern === c.channel}
+                      >
+                        <span>{c.channel}</span>
+                        <div>
+                          <i
+                            style={{
+                              width: Number(c.meanRoas) * 10 + "%",
+                              background: colors[r.channels.indexOf(c)],
+                            }}
+                          />
+                        </div>
+                        <strong>{x(c.meanRoas)}</strong>
+                        <small>Weighted {x(c.weightedRoas)}</small>
+                      </button>
+                    ))}
+                </div>
+              </div>
+              <section className="panel pattern-panel">
+                <div className="panel-heading">
+                  <div>
+                    <h2>{pattern}: the shape of performance</h2>
+                    <p>
+                      Descriptive patterns, not estimates of causal response.
+                    </p>
+                  </div>
+                  <select
+                    aria-label="Pattern channel"
+                    value={pattern}
+                    onChange={(e) => setPattern(e.target.value)}
+                  >
+                    {r.channels.map((c) => (
+                      <option key={c.channel}>{c.channel}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="segmented compact">
+                  {[
+                    ["seasonal", "Seasonality"],
+                    ["spend", "Spend sensitivity"],
+                    ["weekday", "Weekday / weekend"],
+                  ].map(([id, label]) => (
+                    <button
+                      key={id}
+                      aria-pressed={metric === id}
+                      onClick={() => setMetric(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <div className="vertical-chart">
+                  {(metric === "seasonal"
+                    ? active.months.map((m) => ({
+                        label: new Date(2024, m.month - 1, 1).toLocaleString(
+                          "en",
+                          { month: "short" },
+                        ),
+                        value: m.roas,
+                        detail: m.count + " days",
+                      }))
+                    : metric === "spend"
+                      ? active.quartiles.map((q) => ({
+                          label: "Q" + q.quartile,
+                          value: q.roas,
+                          detail: lakhs(q.meanSpend) + " avg/day",
+                        }))
+                      : [
+                          {
+                            label: "Weekday",
+                            value: active.weekdayRoas,
+                            detail: "Monday–Friday",
+                          },
+                          {
+                            label: "Weekend",
+                            value: active.weekendRoas,
+                            detail: "Saturday–Sunday",
+                          },
+                        ]
+                  ).map((d) => (
+                    <div className="vertical-column" key={d.label}>
+                      <strong>{x(d.value)}</strong>
+                      <div className="vertical-track">
+                        <i
+                          style={{
+                            height:
+                              (Number(d.value) /
+                                Math.max(
+                                  ...(metric === "seasonal"
+                                    ? active.months.map((m) => Number(m.roas))
+                                    : metric === "spend"
+                                      ? active.quartiles.map((q) =>
+                                          Number(q.roas),
+                                        )
+                                      : [
+                                          Number(active.weekdayRoas),
+                                          Number(active.weekendRoas),
+                                        ]),
+                                  1,
+                                )) *
+                                100 +
+                              "%",
+                          }}
+                        />
+                      </div>
+                      <span>{d.label}</span>
+                      <small>{d.detail}</small>
+                    </div>
+                  ))}
+                </div>
+                <div className="chart-note">
+                  {metric === "seasonal"
+                    ? "Calendar-month means pool all three years; counts differ with month length and leap day."
+                    : metric === "spend"
+                      ? "Daily spend is sorted into four equal-count bins. Q1 is lowest spend; Q4 is highest. Associations can reflect seasonality and channel targeting."
+                      : "Daily observations are grouped using verified calendar weekdays. All available dates are included."}
+                </div>
+              </section>
+              <div className="insight full">
+                <FlaskConical />
+                <p>
+                  <strong>Use the pattern, respect the limit.</strong> The
+                  challenge’s revenue formula holds ROAS constant. These charts
+                  expose where that simplification may be fragile; they do not
+                  fit a saturation curve or claim incremental lift.
+                </p>
+              </div>
+            </>
+          )}
+          {view === "records" && (
+            <section className="panel">
+              <div className="panel-heading">
+                <div>
+                  <h2>
+                    Daily observations{" "}
+                    <span className="count-pill">
+                      {r.source.rowCount.toLocaleString()}
+                    </span>
+                  </h2>
+                  <p>Original data with a reproducible rounding diagnostic.</p>
+                </div>
+                <a className="button-link" href="/results/records.csv" download>
+                  <ArrowDownToLine size={16} /> All records CSV
+                </a>
+              </div>
+              <div className="filters">
+                <label className="search-box">
+                  <Search size={18} />
+                  <input
+                    aria-label="Search records"
+                    placeholder="Search channel, date, or row…"
+                    value={query}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      setPage(1);
+                    }}
+                  />
+                </label>
+                <select
+                  aria-label="Filter channel"
+                  value={channel}
+                  onChange={(e) => {
+                    setChannel(e.target.value);
+                    setPage(1);
+                  }}
+                >
+                  <option value="all">All channels</option>
+                  {r.channels.map((c) => (
+                    <option key={c.channel}>{c.channel}</option>
+                  ))}
+                </select>
+                <select
+                  aria-label="Sort records"
+                  value={sort}
+                  onChange={(e) => {
+                    setSort(e.target.value);
+                    setPage(1);
+                  }}
+                >
+                  <option value="date-desc">Newest first</option>
+                  <option value="date-asc">Oldest first</option>
+                  <option value="spend">Highest spend</option>
+                  <option value="revenue">Highest revenue</option>
+                  <option value="roas">Highest ROAS</option>
+                </select>
+              </div>
+              {rowError ? (
+                <p role="alert">{rowError}</p>
+              ) : !rows.length ? (
+                <p className="empty-state">Loading all official records…</p>
+              ) : (
+                <>
+                  <div className="table-scroll">
+                    <table className="records-table">
+                      <thead>
+                        <tr>
+                          <th>Date / source row</th>
+                          <th>Channel</th>
+                          <th>Spend</th>
+                          <th>Recorded revenue</th>
+                          <th>ROAS</th>
+                          <th>Evidence</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filtered
+                          .slice((page - 1) * 15, page * 15)
+                          .map((row) => (
+                            <tr key={row.record_id}>
+                              <td>
+                                {row.date}
+                                <small>
+                                  {row.day_of_week} · Row {row.source_row}
+                                </small>
+                              </td>
+                              <td>{row.channel}</td>
+                              <td>{money(row.spend)}</td>
+                              <td>{money(row.revenue)}</td>
+                              <td>{x(row.roas)}</td>
+                              <td>
+                                <button
+                                  className="text-button"
+                                  onClick={() => setSelected(row)}
+                                  aria-label={"Open row " + row.source_row}
+                                >
+                                  View <ArrowUpRight size={15} />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {!filtered.length && (
+                    <p className="empty-state">
+                      No records match these filters. Try another date or
+                      channel.
+                    </p>
+                  )}
+                  <div className="pagination">
+                    <span>
+                      {filtered.length
+                        ? `${(page - 1) * 15 + 1}–${Math.min(page * 15, filtered.length)}`
+                        : "0"}{" "}
+                      of {filtered.length.toLocaleString()} records
+                    </span>
+                    <div>
+                      <button
+                        aria-label="Previous page"
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                      >
+                        <ChevronLeft size={17} />
+                      </button>
+                      <span>
+                        Page {page} of{" "}
+                        {Math.max(1, Math.ceil(filtered.length / 15))}
+                      </span>
+                      <button
+                        aria-label="Next page"
+                        disabled={page * 15 >= filtered.length}
+                        onClick={() => setPage(page + 1)}
+                      >
+                        <ChevronRight size={17} />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </section>
+          )}
+          {view === "methodology" && (
+            <>
+              <div className="method-hero">
+                <div>
+                  <span className="eyebrow">THE RECONCILIATION</span>
+                  <h2>
+                    Same evidence.
+                    <br />
+                    Two allocation conventions.
+                  </h2>
+                  <p>
+                    The official brief suggests a proportional split and asks
+                    for an optimal one. We preserve both interpretations so the
+                    answer can be reviewed.
+                  </p>
+                </div>
+                <div>
+                  <span>Suggested proportional · paise-executable</span>
+                  <strong>{money(r.scenarios.proportional.total)}</strong>
+                  <span>Constant-ROAS linear maximum</span>
+                  <strong>{money(r.scenarios.linear.total)}</strong>
+                </div>
+              </div>
+              <div className="method-grid">
+                {[
+                  [
+                    "01",
+                    "Source & coverage",
+                    "The official marketing_daily.json is the only production input. All 10,950 rows are processed: 1,095 dates × 10 channels. Dates run from 1 January 2023 to 30 December 2025, including leap day; this is not three complete calendar years.",
+                  ],
+                  [
+                    "02",
+                    "Validate before aggregating",
+                    "Validate required fields, finite nonnegative values, integer counts, monetary precision, dates, weekdays, channel names, uniqueness, and complete date/channel coverage. Exact duplicates are excluded once; conflicting duplicates are quarantined. Missing coverage fails the analysis.",
+                  ],
+                  ["03", "One consistent ROAS definition", r.methodology.mean],
+                  ["04", "Proportional baseline", r.methodology.proportional],
+                  [
+                    "05",
+                    "Linear maximum",
+                    r.methodology.linear +
+                      " Email receives ₹15L, SMS ₹12L, and Affiliate the remaining ₹23L. An exchange from a lower-ROAS channel to a higher one increases the objective until a cap binds.",
+                  ],
+                  [
+                    "06",
+                    "Exact money & reconciliation",
+                    r.methodology.rounding +
+                      " The proportional row totals reconcile with ₹0.00 adjustment. The linear rows require a −₹0.01 adjustment.",
+                  ],
+                  [
+                    "07",
+                    "A separate rounding convention",
+                    "Allowing fractional paise in proportional allocations produces ₹2,65,68,802.44, versus ₹2,65,68,802.42 with whole-paise allocations. Both were independently reconciled. The app uses deployable allocations in whole paise; average ROAS is never rounded before multiplication.",
+                  ],
+                  [
+                    "08",
+                    "What this model does not claim",
+                    "This is a constant-return allocation exercise. Descriptive spend quartiles, weekdays, and monthly means show associations, not causality. It does not account for saturation, attribution overlap, or future demand. No agreement with a private answer key is claimed.",
+                  ],
+                ].map(([n, title, body]) => (
+                  <article className="panel method-card" key={n}>
+                    <span className="step">{n}</span>
+                    <h3>{title}</h3>
+                    <p>{body}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="panel provenance">
+                <h2>Source provenance</h2>
+                <dl>
+                  <dt>Accepted / excluded</dt>
+                  <dd>
+                    {r.source.acceptedRows.toLocaleString()} /{" "}
+                    {r.validation.excludedRows}
+                  </dd>
+                  <dt>Missing date/channel pairs</dt>
+                  <dd>0</dd>
+                  <dt>ROAS discrepancies beyond rounding</dt>
+                  <dd>{r.validation.diagnosticCount}</dd>
+                  <dt>SHA-256 · original file bytes</dt>
+                  <dd className="hash">{r.source.sha256}</dd>
+                </dl>
+                <div className="links">
+                  <a href="https://mosaicfellowship.in/data/marketing_daily.json">
+                    Official dataset <ArrowUpRight size={15} />
+                  </a>
+                  <a href="/results/report.json" download>
+                    Analysis JSON <ArrowDownToLine size={15} />
+                  </a>
+                  <a href="/results/records.json" download>
+                    Record evidence JSON <ArrowDownToLine size={15} />
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+          <footer>
+            <span>
+              Mosaic Mix Lab <span className="slash">/</span> Official data.
+              Reproducible decisions.
+            </span>
+            <span>Historical estimates · INR</span>
+          </footer>
+        </main>
+      </div>
+      <dialog
+        ref={dialog}
+        onCancel={() => setSelected(null)}
+        onClick={(e) => {
+          if (e.target === dialog.current) setSelected(null);
+        }}
+      >
+        {selected && (
+          <>
+            <div className="dialog-heading">
+              <div>
+                <p className="eyebrow">SOURCE ROW {selected.source_row}</p>
+                <h2>{selected.channel}</h2>
+                <p>
+                  {selected.date} · {selected.day_of_week}
+                </p>
+              </div>
+              <button
+                className="icon-button"
+                aria-label="Close record"
+                onClick={() => setSelected(null)}
+              >
+                <X />
+              </button>
+            </div>
+            <div className="evidence-cards">
+              <div>
+                <span>Recorded spend</span>
+                <strong>{money(selected.spend)}</strong>
+              </div>
+              <div>
+                <span>Recorded revenue</span>
+                <strong>{money(selected.revenue)}</strong>
+              </div>
+              <div>
+                <span>Spend × reported ROAS</span>
+                <strong>{money(selected.expected_at_reported_roas)}</strong>
+              </div>
+              <div>
+                <span>Revenue difference</span>
+                <strong>{money(selected.revenue_difference)}</strong>
+              </div>
+            </div>
+            <div className="evidence-explanation">
+              <strong>Why the values can differ</strong>
+              <p>{selected.explanation}</p>
+              <code>
+                {money(selected.spend)} × {selected.roas} ={" "}
+                {money(selected.expected_at_reported_roas)}
+              </code>
+            </div>
+            <dl className="record-metrics">
+              {[
+                ["Impressions", selected.impressions],
+                ["Clicks", selected.clicks],
+                ["Conversions", selected.conversions],
+                ["New customers", selected.new_customers],
+                ["CTR (%)", selected.ctr],
+                ["CPC (₹)", selected.cpc],
+                ["CPA (₹)", selected.cpa],
+                ["AOV (₹)", selected.aov],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{Number(value).toLocaleString("en-IN")}</dd>
+                </div>
+              ))}
+            </dl>
+            <button
+              className="primary-button"
+              onClick={() =>
+                download("record-" + selected.source_row + ".json", selected)
+              }
+            >
+              <ArrowDownToLine size={16} /> Download record evidence
+            </button>
+          </>
+        )}
+      </dialog>
+    </div>
+  );
 }
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);

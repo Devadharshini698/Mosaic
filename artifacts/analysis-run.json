@@ -1,0 +1,78 @@
+{
+  "source": {
+    "url": "https://mosaicfellowship.in/data/marketing_daily.json",
+    "sha256": "0c2e4314f496fcd830fe8688cdbe3716ab24aa53c1de052566a9cef150975e50",
+    "rowCount": 10950,
+    "acceptedRows": 10950,
+    "channels": 10,
+    "days": 1095,
+    "start": "2023-01-01",
+    "end": "2025-12-30"
+  },
+  "scenarios": {
+    "proportional": {
+      "mode": "proportional",
+      "allocation": {
+        "Meta Ads": "286616.79",
+        "Google Search": "430286.73",
+        "Google Display": "166717.65",
+        "YouTube": "264541.96",
+        "Instagram Reels": "399829.61",
+        "Email": "1114246.17",
+        "SMS": "729656.07",
+        "Influencer": "430059.95",
+        "Affiliate": "658399.57",
+        "Organic Social": "519645.50"
+      },
+      "revenue": {
+        "Meta Ads": "684770.70",
+        "Google Search": "1543326.51",
+        "Google Display": "231688.81",
+        "YouTube": "583352.47",
+        "Instagram Reels": "1332575.49",
+        "Email": "10349138.78",
+        "SMS": "4437908.15",
+        "Influencer": "1541700.12",
+        "Affiliate": "3613441.15",
+        "Organic Social": "2250900.24"
+      },
+      "total": "26568802.42",
+      "sumRoundedRows": "26568802.42",
+      "roundingAdjustment": "0.00",
+      "exactTotalFraction": "36366048313573/1368750"
+    },
+    "linear": {
+      "mode": "linear",
+      "allocation": {
+        "Meta Ads": "0.00",
+        "Google Search": "0.00",
+        "Google Display": "0.00",
+        "YouTube": "0.00",
+        "Instagram Reels": "0.00",
+        "Email": "1500000.00",
+        "SMS": "1200000.00",
+        "Influencer": "0.00",
+        "Affiliate": "2300000.00",
+        "Organic Social": "0.00"
+      },
+      "revenue": {
+        "Meta Ads": "0.00",
+        "Google Search": "0.00",
+        "Google Display": "0.00",
+        "YouTube": "0.00",
+        "Instagram Reels": "0.00",
+        "Email": "13932027.40",
+        "SMS": "7298630.14",
+        "Influencer": "0.00",
+        "Affiliate": "12622904.11",
+        "Organic Social": "0.00"
+      },
+      "total": "33853561.64",
+      "sumRoundedRows": "33853561.65",
+      "roundingAdjustment": "-0.01",
+      "exactTotalFraction": "2471310000/73"
+    }
+  },
+  "excluded": 0,
+  "diagnostics": 0
+}
