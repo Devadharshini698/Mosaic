@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "implementation": "Node.js decimal.js, 80-digit precision",
+  "rows": 10950,
+  "proportional": "26568802.42",
+  "linear": "33853561.64",
+  "fractionalPaiseProportional": "26568802.44"
+}

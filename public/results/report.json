@@ -1,0 +1,1175 @@
+{
+  "source": {
+    "url": "https://mosaicfellowship.in/data/marketing_daily.json",
+    "sha256": "0c2e4314f496fcd830fe8688cdbe3716ab24aa53c1de052566a9cef150975e50",
+    "rowCount": 10950,
+    "acceptedRows": 10950,
+    "channels": 10,
+    "days": 1095,
+    "start": "2023-01-01",
+    "end": "2025-12-30"
+  },
+  "budget": "5000000.00",
+  "primaryConvention": "proportional",
+  "channels": [
+    {
+      "channel": "Meta Ads",
+      "count": 1095,
+      "meanRoas": "2.389150684932",
+      "roasSum": "2616.12",
+      "weightedRoas": "1.891494",
+      "spend": "273931031.75",
+      "revenue": "518138842.87",
+      "cap": null,
+      "weekdayRoas": "2.354604",
+      "weekendRoas": "2.475463",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "64951.27",
+          "minSpend": "5382.88",
+          "maxSpend": "122183.07",
+          "roas": "3.237509"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "183135.58",
+          "minSpend": "122310.76",
+          "maxSpend": "250316",
+          "roas": "3.243978"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "314758.29",
+          "minSpend": "250663.22",
+          "maxSpend": "372092.73",
+          "roas": "1.839781"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "437140.20",
+          "minSpend": "372462.75",
+          "maxSpend": "499288.85",
+          "roas": "1.238431"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "2.302688"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "2.028588"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "2.342581"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "2.200556"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "2.078172"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "1.467111"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "1.480430"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "2.365484"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "2.243111"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "2.165376"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "3.948889"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "4.043370"
+        }
+      ]
+    },
+    {
+      "channel": "Google Search",
+      "count": 1095,
+      "meanRoas": "3.586739726027",
+      "roasSum": "3927.48",
+      "weightedRoas": "3.571273",
+      "spend": "274878777.07",
+      "revenue": "981667239.15",
+      "cap": null,
+      "weekdayRoas": "4.027647",
+      "weekendRoas": "2.485176",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "62466.34",
+          "minSpend": "5320",
+          "maxSpend": "117534.74",
+          "roas": "3.671026"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "184847.55",
+          "minSpend": "117825.01",
+          "maxSpend": "250171.9",
+          "roas": "3.498029"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "315417.16",
+          "minSpend": "252186.59",
+          "maxSpend": "379109.32",
+          "roas": "3.609197"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "440704.14",
+          "minSpend": "379186.29",
+          "maxSpend": "499307.4",
+          "roas": "3.569015"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "3.396774"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "3.423294"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "3.283656"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "3.241889"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "3.226989"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "2.283889"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "2.264086"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "3.326344"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "3.310667"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "3.282366"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "6.062111"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "5.968152"
+        }
+      ]
+    },
+    {
+      "channel": "Google Display",
+      "count": 1095,
+      "meanRoas": "1.389707762557",
+      "roasSum": "1521.73",
+      "weightedRoas": "1.372492",
+      "spend": "281674903.51",
+      "revenue": "386596449.21",
+      "cap": null,
+      "weekdayRoas": "1.381215",
+      "weekendRoas": "1.410927",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "67747.36",
+          "minSpend": "5756.12",
+          "maxSpend": "134812.65",
+          "roas": "1.427106"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "199098.97",
+          "minSpend": "134818.52",
+          "maxSpend": "263303.37",
+          "roas": "1.432299"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "321632.61",
+          "minSpend": "263366.4",
+          "maxSpend": "380681.49",
+          "roas": "1.326861"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "439778.92",
+          "minSpend": "381830.86",
+          "maxSpend": "499935.55",
+          "roas": "1.372701"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "1.305914"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "1.292000"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "1.269032"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "1.200111"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "1.260645"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "0.834444"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "0.833118"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "1.294946"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "1.315111"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "1.228065"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "2.408778"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "2.443696"
+        }
+      ]
+    },
+    {
+      "channel": "YouTube",
+      "count": 1095,
+      "meanRoas": "2.205141552511",
+      "roasSum": "2414.63",
+      "weightedRoas": "2.227818",
+      "spend": "284785877.04",
+      "revenue": "634450969.94",
+      "cap": null,
+      "weekdayRoas": "2.196739",
+      "weekendRoas": "2.226134",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "72850.76",
+          "minSpend": "7499.6",
+          "maxSpend": "139700.2",
+          "roas": "2.173150"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "202741.85",
+          "minSpend": "140009.96",
+          "maxSpend": "257998.81",
+          "roas": "2.111934"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "320317.30",
+          "minSpend": "258672.98",
+          "maxSpend": "381909.71",
+          "roas": "2.291204"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "443720.48",
+          "minSpend": "382002.74",
+          "maxSpend": "499526.9",
+          "roas": "2.244161"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "2.046237"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "2.010471"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "2.062581"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "1.995556"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "2.041828"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "1.385889"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "1.441290"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "1.985269"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "2.045889"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "1.947419"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "3.676333"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "3.832826"
+        }
+      ]
+    },
+    {
+      "channel": "Instagram Reels",
+      "count": 1095,
+      "meanRoas": "3.332858447489",
+      "roasSum": "3649.48",
+      "weightedRoas": "3.329562",
+      "spend": "272850312.72",
+      "revenue": "908472077.73",
+      "cap": null,
+      "weekdayRoas": "3.313811",
+      "weekendRoas": "3.380447",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "65805.57",
+          "minSpend": "5596.99",
+          "maxSpend": "122720.7",
+          "roas": "3.363333"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "186276.25",
+          "minSpend": "122996.43",
+          "maxSpend": "248981.05",
+          "roas": "3.333796"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "309926.14",
+          "minSpend": "249065.35",
+          "maxSpend": "370250.11",
+          "roas": "3.230620"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "434036.27",
+          "minSpend": "370843.49",
+          "maxSpend": "499656.42",
+          "roas": "3.403796"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "3.080000"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "2.980824"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "3.012258"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "3.070222"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "2.996022"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "2.139000"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "2.145269"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "3.120860"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "2.971556"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "3.145484"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "5.816111"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "5.531522"
+        }
+      ]
+    },
+    {
+      "channel": "Email",
+      "count": 1095,
+      "meanRoas": "9.288018264840",
+      "roasSum": "10170.38",
+      "weightedRoas": "9.357299",
+      "spend": "46081105.73",
+      "revenue": "431194673.93",
+      "cap": "1500000.00",
+      "weekdayRoas": "9.352634",
+      "weekendRoas": "9.126581",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "14118.02",
+          "minSpend": "5003.31",
+          "maxSpend": "22759.52",
+          "roas": "9.053810"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "32679.40",
+          "minSpend": "22798.82",
+          "maxSpend": "42946.42",
+          "roas": "9.261131"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "51418.26",
+          "minSpend": "42958.82",
+          "maxSpend": "60526.91",
+          "roas": "9.422409"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "70015.07",
+          "minSpend": "60738.16",
+          "maxSpend": "79867.85",
+          "roas": "9.413869"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "8.315376"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "8.618588"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "8.212366"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "8.307333"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "8.820968"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "6.167000"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "5.909785"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "8.574946"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "8.811000"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "7.783118"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "16.005111"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "16.014348"
+        }
+      ]
+    },
+    {
+      "channel": "SMS",
+      "count": 1095,
+      "meanRoas": "6.082191780822",
+      "roasSum": "6660.00",
+      "weightedRoas": "6.132335",
+      "spend": "24587998.07",
+      "revenue": "150781852.20",
+      "cap": "1200000.00",
+      "weekdayRoas": "6.023798",
+      "weekendRoas": "6.228083",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "8984.25",
+          "minSpend": "5014.38",
+          "maxSpend": "13145.05",
+          "roas": "5.919707"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "17850.22",
+          "minSpend": "13152.5",
+          "maxSpend": "22405.65",
+          "roas": "6.039234"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "26885.39",
+          "minSpend": "22420.64",
+          "maxSpend": "31617.74",
+          "roas": "6.253212"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "36050.15",
+          "minSpend": "31660.44",
+          "maxSpend": "39988.33",
+          "roas": "6.116022"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "5.551720"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "5.502000"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "5.576129"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "5.581333"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "5.738925"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "3.818889"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "3.821075"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "5.313011"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "5.654556"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "5.381613"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "10.897000"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "10.196739"
+        }
+      ]
+    },
+    {
+      "channel": "Influencer",
+      "count": 1095,
+      "meanRoas": "3.584849315068",
+      "roasSum": "3925.41",
+      "weightedRoas": "3.558937",
+      "spend": "265162660.11",
+      "revenue": "943697155.02",
+      "cap": null,
+      "weekdayRoas": "3.563657",
+      "weekendRoas": "3.637796",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "61301.13",
+          "minSpend": "5139.18",
+          "maxSpend": "115583.48",
+          "roas": "3.613223"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "174422.22",
+          "minSpend": "115701.65",
+          "maxSpend": "234386.15",
+          "roas": "3.580292"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "299306.90",
+          "minSpend": "234424.26",
+          "maxSpend": "369873.24",
+          "roas": "3.546934"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "432940.41",
+          "minSpend": "370406.85",
+          "maxSpend": "499936.56",
+          "roas": "3.599051"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "3.334301"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "3.433882"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "3.341720"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "3.231222"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "3.258387"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "2.298889"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "2.192366"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "3.107634"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "3.225889"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "3.139570"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "6.167889"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "6.321739"
+        }
+      ]
+    },
+    {
+      "channel": "Affiliate",
+      "count": 1095,
+      "meanRoas": "5.488219178082",
+      "roasSum": "6009.60",
+      "weightedRoas": "5.531538",
+      "spend": "273045866.71",
+      "revenue": "1510363693.26",
+      "cap": null,
+      "weekdayRoas": "5.484066",
+      "weekendRoas": "5.498594",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "59967.78",
+          "minSpend": "5366.44",
+          "maxSpend": "120212.45",
+          "roas": "5.183810"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "183559.66",
+          "minSpend": "120701.28",
+          "maxSpend": "251214.97",
+          "roas": "5.651533"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "315724.51",
+          "minSpend": "251978.84",
+          "maxSpend": "376343.15",
+          "roas": "5.687920"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "437484.67",
+          "minSpend": "376636.78",
+          "maxSpend": "499624.88",
+          "roas": "5.428504"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "5.119355"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "4.979647"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "4.985269"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "4.978333"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "5.075699"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "3.677667"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "3.396559"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "4.953763"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "5.025778"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "4.914086"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "9.679889"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "9.113261"
+        }
+      ]
+    },
+    {
+      "channel": "Organic Social",
+      "count": 1095,
+      "meanRoas": "4.331607305936",
+      "roasSum": "4743.11",
+      "weightedRoas": "4.267307",
+      "spend": "279043616.73",
+      "revenue": "1190764704.28",
+      "cap": null,
+      "weekdayRoas": "4.352954",
+      "weekendRoas": "4.278275",
+      "quartiles": [
+        {
+          "quartile": 1,
+          "count": 273,
+          "meanSpend": "64397.86",
+          "minSpend": "5058.72",
+          "maxSpend": "125747.86",
+          "roas": "4.514286"
+        },
+        {
+          "quartile": 2,
+          "count": 274,
+          "meanSpend": "192896.01",
+          "minSpend": "126067.28",
+          "maxSpend": "260242.51",
+          "roas": "4.359964"
+        },
+        {
+          "quartile": 3,
+          "count": 274,
+          "meanSpend": "319740.45",
+          "minSpend": "260680.93",
+          "maxSpend": "376986.32",
+          "roas": "4.216022"
+        },
+        {
+          "quartile": 4,
+          "count": 274,
+          "meanSpend": "441608.07",
+          "minSpend": "377472.74",
+          "maxSpend": "498684.03",
+          "roas": "4.236825"
+        }
+      ],
+      "months": [
+        {
+          "month": 1,
+          "count": 93,
+          "roas": "4.156237"
+        },
+        {
+          "month": 2,
+          "count": 85,
+          "roas": "4.053294"
+        },
+        {
+          "month": 3,
+          "count": 93,
+          "roas": "3.862258"
+        },
+        {
+          "month": 4,
+          "count": 90,
+          "roas": "3.877667"
+        },
+        {
+          "month": 5,
+          "count": 93,
+          "roas": "3.864731"
+        },
+        {
+          "month": 6,
+          "count": 90,
+          "roas": "2.866556"
+        },
+        {
+          "month": 7,
+          "count": 93,
+          "roas": "2.753226"
+        },
+        {
+          "month": 8,
+          "count": 93,
+          "roas": "3.966344"
+        },
+        {
+          "month": 9,
+          "count": 90,
+          "roas": "3.923889"
+        },
+        {
+          "month": 10,
+          "count": 93,
+          "roas": "3.768710"
+        },
+        {
+          "month": 11,
+          "count": 90,
+          "roas": "7.523333"
+        },
+        {
+          "month": 12,
+          "count": 92,
+          "roas": "7.400000"
+        }
+      ]
+    }
+  ],
+  "scenarios": {
+    "proportional": {
+      "mode": "proportional",
+      "allocation": {
+        "Meta Ads": "286616.79",
+        "Google Search": "430286.73",
+        "Google Display": "166717.65",
+        "YouTube": "264541.96",
+        "Instagram Reels": "399829.61",
+        "Email": "1114246.17",
+        "SMS": "729656.07",
+        "Influencer": "430059.95",
+        "Affiliate": "658399.57",
+        "Organic Social": "519645.50"
+      },
+      "revenue": {
+        "Meta Ads": "684770.70",
+        "Google Search": "1543326.51",
+        "Google Display": "231688.81",
+        "YouTube": "583352.47",
+        "Instagram Reels": "1332575.49",
+        "Email": "10349138.78",
+        "SMS": "4437908.15",
+        "Influencer": "1541700.12",
+        "Affiliate": "3613441.15",
+        "Organic Social": "2250900.24"
+      },
+      "total": "26568802.42",
+      "sumRoundedRows": "26568802.42",
+      "roundingAdjustment": "0.00",
+      "exactTotalFraction": "36366048313573/1368750"
+    },
+    "linear": {
+      "mode": "linear",
+      "allocation": {
+        "Meta Ads": "0.00",
+        "Google Search": "0.00",
+        "Google Display": "0.00",
+        "YouTube": "0.00",
+        "Instagram Reels": "0.00",
+        "Email": "1500000.00",
+        "SMS": "1200000.00",
+        "Influencer": "0.00",
+        "Affiliate": "2300000.00",
+        "Organic Social": "0.00"
+      },
+      "revenue": {
+        "Meta Ads": "0.00",
+        "Google Search": "0.00",
+        "Google Display": "0.00",
+        "YouTube": "0.00",
+        "Instagram Reels": "0.00",
+        "Email": "13932027.40",
+        "SMS": "7298630.14",
+        "Influencer": "0.00",
+        "Affiliate": "12622904.11",
+        "Organic Social": "0.00"
+      },
+      "total": "33853561.64",
+      "sumRoundedRows": "33853561.65",
+      "roundingAdjustment": "-0.01",
+      "exactTotalFraction": "2471310000/73"
+    }
+  },
+  "validation": {
+    "excludedRows": 0,
+    "issues": [],
+    "missingRecords": [],
+    "diagnosticCount": 0,
+    "diagnostics": [],
+    "countsByCategory": {}
+  },
+  "methodology": {
+    "mean": "Arithmetic mean of supplied daily ROAS across all 1,095 rows per channel, without pre-rounding. Revenue/spend weighted ROAS is a separate diagnostic.",
+    "proportional": "Allocate in proportion to mean ROAS; iteratively cap and redistribute; apportion remaining paise by largest remainders, alphabetical ties.",
+    "linear": "Sort by mean ROAS and fill highest-return channels to their caps. Globally optimal for the stated constant-ROAS linear formula; not a causal marketing forecast.",
+    "rounding": "Rational arithmetic internally. Allocations are integer paise. ROUND_HALF_UP only on final outputs. A separate adjustment reconciles rounded channel rows to the rounded total.",
+    "ambiguity": "The brief recommends proportional allocation while asking for optimal allocation. Proportional is the suggested baseline, not the mathematical maximum. Both are supplied; neither is verified against the private answer key."
+  }
+}

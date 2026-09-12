@@ -1,0 +1,15 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.env*
+!.env.example
+.sites-runtime/
+artifacts/demo/*.wav
+artifacts/demo/*.mp3
+artifacts/demo/*.png
+artifacts/demo/*.mp4
+artifacts/*.tar.gz
+*.tmp
+*.tsbuildinfo
+.DS_Store

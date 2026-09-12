@@ -1,0 +1,25 @@
+scenario,channel,average_roas,allocation_inr,expected_revenue_inr
+proportional,Meta Ads,2.389150684932,286616.79,684770.70
+proportional,Google Search,3.586739726027,430286.73,1543326.51
+proportional,Google Display,1.389707762557,166717.65,231688.81
+proportional,YouTube,2.205141552511,264541.96,583352.47
+proportional,Instagram Reels,3.332858447489,399829.61,1332575.49
+proportional,Email,9.288018264840,1114246.17,10349138.78
+proportional,SMS,6.082191780822,729656.07,4437908.15
+proportional,Influencer,3.584849315068,430059.95,1541700.12
+proportional,Affiliate,5.488219178082,658399.57,3613441.15
+proportional,Organic Social,4.331607305936,519645.50,2250900.24
+proportional,ROUNDING ADJUSTMENT,,,0.00
+proportional,TOTAL,,5000000.00,26568802.42
+linear,Meta Ads,2.389150684932,0.00,0.00
+linear,Google Search,3.586739726027,0.00,0.00
+linear,Google Display,1.389707762557,0.00,0.00
+linear,YouTube,2.205141552511,0.00,0.00
+linear,Instagram Reels,3.332858447489,0.00,0.00
+linear,Email,9.288018264840,1500000.00,13932027.40
+linear,SMS,6.082191780822,1200000.00,7298630.14
+linear,Influencer,3.584849315068,0.00,0.00
+linear,Affiliate,5.488219178082,2300000.00,12622904.11
+linear,Organic Social,4.331607305936,0.00,0.00
+linear,ROUNDING ADJUSTMENT,,,-0.01
+linear,TOTAL,,5000000.00,33853561.64

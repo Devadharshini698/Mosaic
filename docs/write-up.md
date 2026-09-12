@@ -1,0 +1,13 @@
+Mosaic Mix Lab processes all 10,950 official channel-day observations using reproducible code. Each channel has 1,095 dates from 1 January 2023 to 30 December 2025. The engine checks schema, dates, weekdays, missing values, monetary precision, duplicates, zero spend, and complete date/channel coverage. All supplied rows pass. Original bytes are preserved with a SHA-256 fingerprint.
+
+I use the arithmetic mean of supplied daily ROAS, not total revenue divided by total spend. Python parses decimals exactly and uses rational arithmetic for allocations and expected returns. Whole-paise allocation uses largest remainders; final outputs use half-up rounding. A separate JavaScript decimal implementation independently reproduces both results.
+
+The brief suggests proportional allocation but asks for an optimal allocation. The suggested baseline produces ₹26,568,802.42, with all ten channels funded and both caps respected. If fractional paise are retained until the final total, the alternate baseline is ₹26,568,802.44. These conventions are explicitly separated.
+
+The mathematical maximum under the stated constant-ROAS formula is ₹33,853,561.64: ₹1,500,000 to Email, ₹1,200,000 to SMS, and ₹2,300,000 to Affiliate. Other channels receive zero. The displayed channel returns require a −₹0.01 rounding adjustment. Both scenarios reconcile to the ₹5,000,000 budget. No agreement with the private answer key is claimed.
+
+Email has the highest mean ROAS at 9.288018, followed by SMS at 6.082192 and Affiliate at 5.488219. Meta Ads shows pronounced spend sensitivity: mean ROAS falls from 3.237509 in the lowest spend quartile to 1.238431 in the highest. Google Search performs better on weekdays, averaging 4.027647 versus 2.485176 on weekends. Email's monthly means rise to roughly 16 times in November and December, compared with roughly 6 times in June and July. These are descriptive associations, not causal estimates.
+
+The interface makes the allocation decision immediate, with editable budgets, visible cap warnings, channel contribution charts, and an exact reconciliation table. Channel intelligence exposes seasonal and spend patterns. A searchable, filterable, sortable evidence explorer preserves every source row and explains why spend multiplied by rounded ROAS can differ from recorded revenue. JSON and CSV downloads support review.
+
+The static React application requires no login. Tests cover malformed records, overlapping validation failures, duplicates, caps, redistribution, rounding, and linear optimality. The model deliberately follows the challenge's constant-return formula; it does not forecast saturation, attribution overlap, or incremental lift. No fellowship application has been submitted.

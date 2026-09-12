@@ -1,0 +1,19 @@
+{
+  "durationSeconds": 107.836,
+  "resolution": "1920x1080",
+  "fps": 24,
+  "videoCodec": "H.264",
+  "audioCodec": "AAC 128kbps",
+  "pixelFormat": "yuv420p",
+  "fastStart": true,
+  "captionCues": 29,
+  "captions": "burned in and separate SRT",
+  "voice": "Microsoft Zira Desktop, synthetic",
+  "scenes": 8,
+  "source": "Authentic app screenshots captured through browser tool",
+  "fileBytes": 2943086,
+  "audioLevels": [
+    "mean_volume: -20.6 dB",
+    "max_volume: -2.7 dB"
+  ]
+}
