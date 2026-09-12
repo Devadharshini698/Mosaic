@@ -12,4 +12,6 @@ artifacts/demo/*.mp4
 artifacts/*.tar.gz
 *.tmp
 *.tsbuildinfo
+*.bundle
+*.zip
 .DS_Store

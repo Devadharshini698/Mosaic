@@ -9,7 +9,7 @@
 - Baseline revenue ₹26,568,802.42; linear maximum ₹33,853,561.64. Baseline channel rows reconcile without adjustment; linear rows reconcile after −₹0.01.
 - Independent Node.js decimal.js implementation agrees on both totals and each allocation. It also calculates ₹26,568,802.44 for the alternate fractional-paise proportional convention.
 - 16 Python unit tests pass, covering schema failures, missing values, nonfinite/negative numbers, fractional counts, monetary precision, date range, weekdays, zero spend, exact and conflicting duplicates, overlapping errors, missing coverage, half-up rounding, cap redistribution, remainder ties, zero weights, capacity errors, and linear exchange optimality.
-- TypeScript, ESLint, Vite production build passed; final build will be repeated after documentation/demo integration.
+- TypeScript, ESLint, and Vite production build passed, including the final documentation/demo integration build.
 - `npm install` audit reported zero dependency vulnerabilities.
 
 ## Browser checks completed
@@ -24,4 +24,6 @@ Methodology navigation and provenance values were verified. Mobile viewport test
 
 ## Demo and public HTTP
 
-See `artifacts/demo/validation.json` for actual duration, encoding, captions, audio levels, and source-screen information. Public endpoint checks are recorded separately in `artifacts/http-validation.json` only after successful deployment. A local preview is not a public deployment test.
+The video is 107.836 seconds, 1920×1080, 24 fps, H.264/AAC, with 29 burned-in caption cues and a separate SRT. Mean audio level is −20.6 dB and peak is −2.7 dB. Representative encoded frames were inspected; final captions fit the lower caption band. See `artifacts/demo/validation.json`.
+
+After deployment, seven unauthenticated endpoint checks returned HTTP 200, with no cookies or bypass tokens. The report JSON, full record JSON, both CSVs, video, and subtitles matched local bytes exactly. Production browser QA confirmed combined search/filter, source row 6 evidence, methodology rounding disclosure, and the correct baseline. No browser console errors were observed. Full receipts are in `artifacts/http-validation.json`.

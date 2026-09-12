@@ -98,18 +98,22 @@ def serialize(x):
     if isinstance(x,F): return fixed(x,12)
     raise TypeError(type(x).__name__)
 
-def run():
-    path=ROOT/'data/marketing_daily.json'; raw=load(path)
-    if not isinstance(raw,list): raise ValueError('Dataset must be an array')
-    rows,issues=validate(raw)
-    grouped=defaultdict(list)
-    for r in rows: grouped[r['channel']].append(r)
+def missing_coverage(rows):
     keys={(r['date'],r['channel']) for r in rows}
     missing=[]
     for n in range(1095):
         d=(date(2023,1,1)+timedelta(days=n)).isoformat()
         for c in CHANNELS:
             if (d,c) not in keys: missing.append({'date':d,'channel':c})
+    return missing
+
+def run():
+    path=ROOT/'data/marketing_daily.json'; raw=load(path)
+    if not isinstance(raw,list): raise ValueError('Dataset must be an array')
+    rows,issues=validate(raw)
+    grouped=defaultdict(list)
+    for r in rows: grouped[r['channel']].append(r)
+    missing=missing_coverage(rows)
     if missing or set(grouped)!=set(CHANNELS):
         (ROOT/'artifacts/validation-failure.json').write_text(json.dumps({'issues':issues,'missing':missing},default=serialize,indent=2))
         raise ValueError('Incomplete official date/channel coverage; see artifacts/validation-failure.json')

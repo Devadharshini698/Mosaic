@@ -6,7 +6,7 @@ A public marketing budget optimizer for the Mosaic Fellowship **Marketing Mix Op
 
 **App origin:** https://mosaic-mix-lab-ajay.ochre-deer-1487.chatgpt.site
 
-The app origin is allocated by OpenAI Sites. Consult `docs/deployment.md` for verified publication status. A configured origin alone does not mean deployment succeeded.
+The app is live on OpenAI Sites with public, no-login access. Seven unauthenticated HTTP checks passed, including the app, all report endpoints, demo video, and subtitles. Consult `artifacts/http-validation.json` for the evidence. Publication to the requested GitHub repository is still blocked by unavailable authenticated write access.
 
 ## Results
 

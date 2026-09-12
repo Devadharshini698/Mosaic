@@ -1,0 +1,12 @@
+{
+  "appStatus": "live",
+  "appUrl": "https://mosaic-mix-lab-ajay.ochre-deer-1487.chatgpt.site",
+  "hostingPlatform": "OpenAI Sites",
+  "access": "public, no login",
+  "projectId": "appgprj_6aa4d83b374481919c0328f5efdc8e28",
+  "verifiedDeployment": "appgdep_6aa4df4706808191afcff8aaf93d93c0",
+  "githubUrl": "https://github.com/Devadharshini698/Mosaic",
+  "githubPublished": false,
+  "githubBlocker": "No authenticated Git credential; signed-in browser account had no write controls. Push failed before publication.",
+  "applicationSubmitted": false
+}

@@ -2,7 +2,7 @@ import copy
 import unittest
 from decimal import Decimal as D
 from fractions import Fraction as F
-from engine.analyze import allocate, fixed, load, validate, ROOT, CHANNELS, BUDGET, CAPS, scenario
+from engine.analyze import allocate, fixed, load, validate, ROOT, CHANNELS, BUDGET, CAPS, scenario, missing_coverage
 
 class AuditTests(unittest.TestCase):
     @classmethod
@@ -32,7 +32,9 @@ class AuditTests(unittest.TestCase):
     def test_overlapping_errors_excluded_once(self):
         r=dict(self.one(),spend=D(-1),date='bad',channel='Unknown'); accepted,issues=validate([r]); self.assertEqual(len(issues),1); self.assertEqual(len(issues[0]['categories']),3); self.assertEqual(accepted,[])
     def test_missing_coverage_detectable(self):
-        rows,_=validate(self.rows[:-1]); self.assertEqual(len(rows),10949)
+        rows,_=validate(self.rows[:-1])
+        self.assertEqual(missing_coverage(rows),[{'date':self.rows[-1]['date'],'channel':self.rows[-1]['channel']}])
+        self.assertEqual(missing_coverage(self.rows),[])
     def test_decimal_half_up(self):
         self.assertEqual(fixed(F('1.005')),'1.01'); self.assertEqual(fixed(F('-1.005')),'-1.01')
         self.assertEqual(fixed(F('0.1')+F('0.2')),'0.30')

@@ -1,0 +1,59 @@
+{
+  "checkedAt": "2026-09-12T05:13:43.646071+00:00",
+  "origin": "https://mosaic-mix-lab-ajay.ochre-deer-1487.chatgpt.site",
+  "authenticated": false,
+  "cookiesSent": false,
+  "bypassTokenUsed": false,
+  "passed": true,
+  "checks": [
+    {
+      "endpoint": "/",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 1572,
+      "exactBytesMatch": false
+    },
+    {
+      "endpoint": "/results/report.json",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 26659,
+      "exactBytesMatch": true
+    },
+    {
+      "endpoint": "/results/records.json",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 7341559,
+      "exactBytesMatch": true
+    },
+    {
+      "endpoint": "/results/allocation.csv",
+      "status": 200,
+      "contentType": "text/csv",
+      "bytes": 1309,
+      "exactBytesMatch": true
+    },
+    {
+      "endpoint": "/results/records.csv",
+      "status": 200,
+      "contentType": "text/csv",
+      "bytes": 3180741,
+      "exactBytesMatch": true
+    },
+    {
+      "endpoint": "/demo/mosaic-mix-lab-demo.mp4",
+      "status": 200,
+      "contentType": "video/mp4",
+      "bytes": 2943086,
+      "exactBytesMatch": true
+    },
+    {
+      "endpoint": "/demo/demo.srt",
+      "status": 200,
+      "contentType": "text/plain",
+      "bytes": 3259,
+      "exactBytesMatch": true
+    }
+  ]
+}
